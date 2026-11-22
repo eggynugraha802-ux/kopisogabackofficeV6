@@ -1,0 +1,3043 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kopi Soga — Backoffice & Kalkulator HPP Barista v6</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --soga-pine: #00491E;
+      --soga-pine-deep: #003516;
+      --sbux-green: #006241;
+      --sbux-mint: #E8F3EE;
+      --soga-orange: #E0660B;
+      --terracotta: #C0583C;
+      --terracotta-soft: #FDF0EC;
+      --cream-bg: #FAF8F4;
+      --card-bg: #FFFFFF;
+      --text-main: #1A241E;
+      --text-muted: #5A6860;
+      --border-soft: #E2DDD3;
+      --input-bg: #FFFDF7;
+      --input-border: #D9B98E;
+      --danger: #C93B2B;
+      --danger-soft: #FDECEB;
+      --warn: #D97706;
+      --warn-soft: #FEF3C7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--cream-bg);
+      color: var(--text-main);
+      line-height: 1.45;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* TOP BRAND HEADER */
+    .topbar {
+      background: linear-gradient(135deg, var(--soga-pine-deep) 0%, var(--soga-pine) 65%, #065728 100%);
+      color: #FFFFFF;
+      border-bottom: 4px solid var(--soga-orange);
+      padding: 14px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.16);
+    }
+
+    .topbar-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo-img {
+      height: 46px;
+      width: auto;
+      display: block;
+      border-radius: 6px;
+    }
+
+    .brand-divider {
+      width: 1.5px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    .brand-module-title h1 {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      color: #FFFFFF;
+    }
+
+    .brand-module-title p {
+      font-size: 11.5px;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+    }
+
+    .topbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .btn-orange {
+      background: var(--soga-orange);
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(224, 102, 11, 0.35);
+    }
+    .btn-orange:hover { background: #C85908; }
+
+    .btn-outline-light {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.28);
+      color: #FFFFFF;
+    }
+    .btn-outline-light:hover { background: rgba(255, 255, 255, 0.2); }
+
+    .btn-green {
+      background: var(--sbux-green);
+      color: #FFFFFF;
+    }
+    .btn-green:hover { background: var(--soga-pine); }
+
+    .btn-soft {
+      background: var(--cream-bg);
+      border-color: var(--border-soft);
+      color: var(--text-main);
+    }
+    .btn-soft:hover { border-color: var(--sbux-green); }
+
+    /* MODULE NAVIGATION TABS */
+    .module-nav-wrap {
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border-soft);
+      padding: 10px 20px;
+      position: sticky;
+      top: 78px;
+      z-index: 40;
+    }
+
+    .module-nav {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .module-nav::-webkit-scrollbar { display: none; }
+
+    .nav-pill {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border-soft);
+      background: var(--cream-bg);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .nav-pill .pill-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      background: rgba(0, 73, 30, 0.1);
+      color: var(--soga-pine);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .nav-pill:hover {
+      border-color: var(--sbux-green);
+      color: var(--soga-pine);
+    }
+
+    .nav-pill.active {
+      background: var(--soga-pine);
+      border-color: var(--soga-pine);
+      color: #FFFFFF;
+      box-shadow: 0 3px 10px rgba(0, 73, 30, 0.22);
+    }
+
+    .nav-pill.active .pill-num {
+      background: var(--soga-orange);
+      color: #FFFFFF;
+    }
+
+    /* MAIN CONTAINER */
+    .container {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.18s ease;
+    }
+    .tab-panel.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SECTION HEADERS & KPI CARDS */
+    .panel-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid var(--border-soft);
+    }
+
+    .panel-title-group {
+      border-left: 4px solid var(--terracotta);
+      padding-left: 12px;
+    }
+
+    .panel-title-group h2 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--soga-pine);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .panel-title-group p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--sbux-green);
+    }
+
+    .kpi-card.accent::before { background: var(--soga-orange); }
+    .kpi-card.terracotta::before { background: var(--terracotta); }
+
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+
+    .kpi-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--soga-pine);
+      margin-top: 4px;
+    }
+
+    .kpi-card.accent .kpi-value { color: var(--soga-orange); }
+    .kpi-card.terracotta .kpi-value { color: var(--terracotta); }
+
+    .kpi-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* CARDS & TABLES */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .card-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--soga-pine);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: var(--sbux-mint);
+      color: var(--sbux-green);
+    }
+
+    .badge-tag.orange {
+      background: var(--terracotta-soft);
+      color: var(--terracotta);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      min-width: 680px;
+    }
+
+    th {
+      background: var(--soga-pine);
+      color: #FFFFFF;
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 11px;
+      font-size: 11.5px;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    th.num, td.num { text-align: right; }
+    th.center, td.center { text-align: center; }
+
+    td {
+      padding: 8px 11px;
+      border-bottom: 1px solid #EFECE4;
+      vertical-align: middle;
+    }
+
+    tr:nth-child(even) td { background-color: #FCFBF8; }
+    tr:hover td { background-color: #F4F8F5; }
+
+    tr.total-row td {
+      background: var(--sbux-mint) !important;
+      font-weight: 800;
+      color: var(--soga-pine);
+      border-top: 2px solid var(--sbux-green);
+      border-bottom: none;
+    }
+
+    /* INPUT CONTROLS */
+    input[type="number"], input[type="text"], input[type="date"], select {
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: 7px;
+      padding: 5px 8px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input[type="number"] {
+      width: 105px;
+      text-align: right;
+    }
+
+    input[type="number"].sm { width: 76px; }
+    input[type="text"].note-inp { width: 150px; font-weight: 500; text-align: left; }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--soga-orange);
+      box-shadow: 0 0 0 3px rgba(224, 102, 11, 0.15);
+      background: #FFFFFF;
+    }
+
+    .param-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+
+    .param-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* STATUS PILLS */
+    .status-pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .status-ok { background: var(--sbux-mint); color: var(--sbux-green); }
+    .status-warn { background: var(--warn-soft); color: var(--warn); }
+    .status-bad { background: var(--danger-soft); color: var(--danger); }
+    .status-neutral { background: #EFECE6; color: var(--text-muted); }
+
+    /* GRID LAYOUTS FOR PREP & RECIPES */
+    .prep-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(410px, 1fr));
+      gap: 16px;
+    }
+
+    .prep-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .prep-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--border-soft);
+    }
+
+    .prep-card-head h3 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--soga-pine);
+    }
+
+    .prep-card-head p {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .prep-summary-bar {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: var(--sbux-mint);
+      border-radius: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--soga-pine);
+    }
+
+    .unit-cost-highlight {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--terracotta);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--soga-pine);
+      color: #FFFFFF;
+      border-left: 4px solid var(--soga-orange);
+      padding: 11px 16px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: all 0.22s ease;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 640px) {
+      .topbar { padding: 12px 14px; }
+      .module-nav-wrap { top: 108px; padding: 8px 12px; }
+      .container { padding: 14px 12px; }
+      .prep-grid { grid-template-columns: 1fr; }
+      .brand-logo-img { height: 38px; }
+    }
+
+    @media print {
+      .topbar-actions, .module-nav-wrap, .no-print { display: none !important; }
+      .topbar { position: static; box-shadow: none; }
+      .tab-panel { display: block !important; page-break-after: always; }
+      body { background: #FFFFFF; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BRAND HEADER -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-cluster">
+        <img class="brand-logo-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbgAAADrCAMAAAAseXNsAAAAwFBMVEXwaAruaArtaArsZwrraArrZwrqZwrpZwroaAroZwrnZwrlZwvlZgvkZwviZgvhZgvgZwvgZgvgZgrfZgveZgvjXgndZgzdZgvcZgvcYQrcWgnbWgnbWQnVZQzWWwq/YQ6uXw+WXBF9WRNwVxRhVRZXVBZOUxdHUhg8UBkxTxonThseTRwRSx0GSh4ESR4DSh4DSR4DSB4CSR8CSR4BSR8BSR4BSB8ASh4ASR8ASR4ASCAASB8ASB4ARyAARx8ARiBpMoCvAAApP0lEQVR42u19CXebyBIuQtsTiiBM4wexg9m0gwhzua0XbmPm//+r1xubhCzkZKTgQ50zmcQyiOLrqq6qrkVIeuokCf0r6IHrqQeupx64HrieeuDuRRDGlCLyB4Q9cF2gOAxhihhl5I80icII9sD90aBhgFD2lga+7+9WmNb4L8Eh+ydjn/XA/ZmoxShL4t3ScyxTWcxnmKSFrJm2662DFH8WxbAH7o+DDaOGdivHMsaCOJdVADRMAKiqPBOEuWl5m+ANJSHsgfuTKEoy5Hu2IUwkWTN0gldBQDMMsJAGouXsDlkaxz1wf4oNGSco3jiGOFIMrYZZBT2g67PR1PIChKIeuD9DSUL0/9b2XFR0vRm0nLDqnImmu8+67CB8GuBghODafpqBK6hx7HR5YC5Rh5H7LMBhLbmzn550TW1JwJAF59Bd8/KTABehwHt5ev32VW1PwBBcFPfAPVJNwv/trKfn12/qTQS0+TaLeuAepybTn8vnp9eXF3AbcKouOkfYA/dANek8Pb+8fL9JUVKRW5iHBPbAPQo33ybi9vKs3kpANvaoB+5RuOHtjeD2Ar7ejJwqb7pqngjdx+2V4na7osSk6Pu0B+4xuG1fn6m8vfx1IUqi64ah67rWYLmAuRX2e9xD7Em0Z/LWJHAAe+OyNBkIhMTpgv7gxKp0UW9VPgQ3n+9vLy9nPpoui2PZsBzX9Zau69iWIg2mNeyAqnVWU3YaOAgPNsftROCAIU9E0/G2wSFBKHtDKA2D/cqxFqJUQNdHTh63wTm5vD3XdaQsGPbaRxlKyWFPFMYkJomy7LBzLXGq6RrZ+mTBCfsg8yNw+986x60mcLoyNN0dQiiOKpldEMIoxOAFK3s2mM4kcWB6YdoD94ANLtm/Pr+cCRzQRprrZyjmJ9yQE/sH/mEWrfGGZ9menyX9edwDNrgY2g0Cpykje1fkJWAlif9MU/Z3ChMk2Q2HIEiytNO5C50FLkbrp5czgTMk4EUZTcCDUZygN4IRoUOSYaQiihX7s+PpQl0FDsLAyhVlKXD62NxmTNpimCG4XbqWaZqGaWLVuMLWSsqSKgvd2QN3f4Fzc0VZHufoI9vP6KE23soSbEEqgiAtZELziSCa2NLEm1+eEBv3qvIxIZMzgdNFO6CpWzDK4o09G85UQ9cAACr+TzP0+VQ0vSDLuMQh1AP3AOCcUuB4lFIfctywuO3s2Ug7jU8CTZ9jT2F9wOYKNli2+2NvVd5f4HLUXr5z00SfWgE1FCN08JSJpl/I7hIkvOHZ2CP4Yqc9cI8UOKYptbnp0wBWlO1tQdUvpwgBaTadTqaSMttkUQ/cfXHzix2Oh5eB+mVD9WSY7cyJAd5PEqLlBIbg9MDdOdiFloXAff9WnNBEVN525txodYqqLUw/7fMq70qhXTjfzKbUJOtAXLMY7UxJb3n+rU12/enAfQVuWyjK71xTLmiGZHz0zZl+XipATsAxnX4wXvXA3Rc4t6Ipv7IESar04tQWT/Skrs3GnCRDOwGuP4+7a7QrCaxCU778xbxvqvSizBPquGlAnFrOcrfbbV3bEqSa1GljpwfurjblrsTthWckpz/wB//1DblmTxqzubM5ZLyCP1hZo1nF4OyBu7em9CqmCd3hJLbDIWeg18z+gbXNsiTmlGThyhIWeg/c471vusURkxIr0Pi4+0sF1VygiXvIYNlkgRzFBZ4p5pEwbez1wN1xi/tZ2+KIQhS87Me5wGlTL0uphx1HmCh+GDrfGXKh08bbHri7bnGvtS0OKPoOO9/YZjHlqjkpuOxENY5/ki0uYcerPxBamSItWwWLfQ/cPbe4TRmnfGbOd0h+/racVGxGfWKH7GgOIX+33e4C9JPjmPn2AGjkNw6wj5zcUeK8ky1uQmwMGP+nqimBYjBxitDesZ6enp4t18dSR+Mu6G9vtNB10XsLkx64++1xbj3epQsrbFPGyK9qSl10iaEJ45/Ll6fnl9fXl6en1+UBMSGE2dqUNMNP+vS8e/rfTt391idbCtyuqikVsD/GRDyXT7wo5OX1+cna/Ez4EfnOEpwu53l1MeRVMSoBqU6kB3EYorFWsSjtmHgIaPdcnv+8vD49OQGzR8Jsb/s9cI8CjtsmQUowcirAGcIyC4mmtJ9ev79U6Mnasu4mcdrplJPuAYet/vIQ9Zmbj1S47KrEzdZYfUK0//oVfKsC9/r07KGfRNJgt1vodQ+4n+Xp9/dnusXZ0SlwWH2SqHOULWea+hU8v9SEzgm63cbrcwO3p8B57GcnQmf73Ueu28B9awnc17+ev1eRs/adR+5TABdfBG45ZT/7qn77ZMh10Ko81IsGsOVPzwZqVqUmrZlvp+THBV+/PX8q5DrtDjDg5jQRNkbumTsAk9Ce5mEwbKN8ryIXoL524M5UpHhR44RHJWO0rkrcxCa/GaPNtMhD/6rWkLMPXa5r7HbIiwKn6iILee2/VE5RFcM/0nQ9VwCFzFU3utcnJ4l64O5qnRQ5XqxsQB8s8X4V/wysCnJFkBm6XyZlitC36j637PI218VjnTKN+Rmo7FgHC1f45lRSvHgEM4EQbe1JmSNbQe75efcz7oG7G0VoWylp/EobOwVYgUZoLYFaL0pEq4XjDK0sEeRCV+5zxEDpW/veE7hKTSPLqpRJ2Q1MDuaigpwmejx1AWaBKxXJXVXk+oTYe+5xpJ9QLY/ZENyMnL0dPaGWfr5YInZwE6VoY474Z6AS/XrubrZQJ/MqnbJPBm/0Sg52YOrXRA6oY/c/7MgbRplvceS+fquInB31TdjuCNyqdpJKgicrlhDrDYx6Qqy9zxDFJkKBPWxAbvW/qAfubmal/1LLq1S1kU0mCMBjYM1rdR36xHB5A6EoPeQFIZVjHmyfdDTRq4tFH2ebHPYINkzkNmK9IEdXBHN5pBtZjArk/voEzlwXQ15hJUHvJU8xoUM7fiD3pFxHNRZD26clwzEKrBnDtVSWnRW5LgJXbXLCm9No4opn450VyAFdNHcUOexIcOsFVERu3U2R62ifk1NdiQ1Ln6bj4W1udFoCbsyMNS8QX0/PRM7u97i72pWv9cpGfehQ85F0+z1DTl+wSmPiSYh6XeSen7tZCN5J4CAKrBORU7UxTcgjO5ktnHXNXhh79INcyF290iUg4ZOoB+5uu9ypeaICRWFSFacHdzI/6XRC2g5BltnM9sCKyNFIZw/cnTyCoJJ4wmOTc3NPkYNJtrYEpd58wRg4zHoJLEk72eU6GffqqHESVUWOz2bRZ+YehSzAFbjGsN6CTRuuM1rfv6S7XCV80k1d2VHgqvnMeRc2bD1yux/jinxnuqi1WJCs4EgCmoFFdzlQCViGvaq84y531hWKytyGNYiFGLqVXot/kYLjiIgc99GL453n1y4Wpna2tW9cxr3yBnoYuTlYpiyqHIfZ1qjKHB8WFx93rKdGxa7cdFBXdriZdtkX6uU5H0GmKUPHz3jhabbVqm1PiMNA7JPUJoGvr3+VutLrJe6u9kmlK/MzKAJcI3N5YBO+w7f1qFoVLtpRDOnhj147I3iyO+gPdBe46iEBNlBA6WxP7HVCW3uFR2dU9Qr+r0/z0rcUzq/FJvdkHXrj5K7KshJrxqbl10LoplMnQCz+pStVj2BJM2d9aleWDsHzq/8T9sDdE7l1palXiZyq6YId0HzYtNqJgbWAgjCyx3oduA6GKzs9P662zVW0JbH9Wa5ltpmVfrg2tskJQphRNL+WKZbPHTza6TRwMIKVptqlbUkDYCSQRaLRpTOHHQJeNTepAff6tOqBu3cA5VBF7qUcjmSIDolwQWSXTTSASuPQrMBY/VqJnXj/C3vg7oscOkGurN5nvRiOtaq58SYLSWbKHPTA/Vky9z1Xl0X3E0/UK33Z1hS4bQ/cH2BaEuRKkfuOhe5rD9yfLm40ngxTr2j7RIXum8rrVOFJnWoP3B9CKWLIofVrdaN7+QaI6U/y9eJjxThRtRHZ46JsI/XGySPlLQ3Y8RuM0L5yVED1pSGyiDKyphWrUq1ald964B60u2XudJPxyoCD+1wVutcnOvkjQrtKX3Qwpzl8UeaO6w5478fdN+Dlm/P5ih0ExAna2uVO9/rECqgiVK28wuqTAFRETr73kZOHxLvoUfbUjfmQRhQvraenl1dMWPg2rI74YM0rcwZYK9kktCd9rPKRO5w11wAYOAHLM8FCF3ikie/T06uTj5JbDqsHcsM1Ox0wifr8+tyfDjxGU7KOsDoZCsGOvKOfKNh4nrfas8aGEapN/uCuHTYqmWtXHqRafXrePYHjDdaMmeKFfPQ3ljpM/0Mxq6sKqE6spFYe6Qm4S4EDlT6I/Qn4PYHLm65pCik8ZaMhYBTFccia96JDDTe8xa2pUj3QlNg+5+ThwKlAn6hukCWVem4MYBbYtSpHbUpTS6LjVlZBvXqgz/J6DHC88DTM0jAiE75hHGKVubXGtSx0XdzUBrl86/MqHw8cFrq5aK2CLENkxDd6g1tHqo/c1Mc2UaHYGDWZwVLJZI77TOZHAUegkwaWs/IDTBvXlsagVmoFVDmfDchrB0rbxOtrBx4IHEkRmgszxTAMMBfHpwNRjQG1QGIYnBbIvXSzsrHDwDnjs2m1uqYqsqwA/XTArTGwI1aw6g6Nemeojjau7DBwyzPgLpIxpKU6ZEq4qtTL91+7qSm7DNx+2hY4Q7RYD8T4YLOLvnbcpuxyrBIG1lRXAaH3YQM6wY1IVZi5eSJDrilfn5yffZ+Tu1L0tsTblSwvFrKsGZfBwz4en4REjr7Z75VhE1JI3Pc5ubfImYJsEjKmgqw3Q6fpY8WLOG67vLteoSlJT+1uNj7sdNHHxtkEweEQ+EvHHMwNDZwpSW06tHcZTSoKs71ZZDWXJwMb1AN3d5lDbyglf0mzzPdMYSbrRplggtWnLM6sNTtoxfK2t2Z6PjyiLI2L+u55D5C5MKaxSRhFKAuWtiEKEkaMEJCngmQ6myhLaCZYiPXkrPDunistYvt+lY+SO4ZhlGax7zkWkGaz6Wy2MG13FaQYNppMlGRrY17O/ChnD6C+Q+xjUCOB44gfxSUoywJ/v9+t9/u9f3jLyM/IJzEK3HlZyF+YJs/Pu2Pfk/kRsMVphpIky4/iYBjRI3BKSch+GMfkiGdQenuFL/D65L31XdAfoiSzYOU6jrs5YOjY2QyMc+L/xLuf76izireQCxx2BYKonzvwCHcgcM2RMBGFub0K3rCInZyrwYjkoOxdU1RrwbGOB7s674CngS0ssAOgG2A2sNx9SNQmFjFGGESUoWDjmKJcPyvId7inFerHST8Atyiwh3mkS9OlkWJ72wBLWMYIpfF+5Voz8SymUvSpfAuTHrj7K8qs1jdb09SpAEzb8VYbQkvXsUxJmIOzUBgTOOwJxHE/P+4RG9zelMFJWFJZzMYDgZE4kWRwHnvmPhwxTGA/B/wBFGar00b1qgqApusGJV3XGo97mElJcOv2pM0OS5w70NWb6dPg1t22h6kjfgA4GqWkuPVzwLsEHBO4J6fz8tZd4KJseb7HXSXw/PL6/OT+TDuPW4eB2y7ABwTu9el1xYp5euAepCv/a4/1W3HD4mbv0SeArduFjbJyG3Lay9OrF3beLOk4cEmElqOF0V5datrTk7N/Sz6FvHW8XcbaFGS9VVYsSRua2Zufn0Tcug0cNlB81xzNdO1aRqymK+LUXicIxkkP3J8gc2kWeNZoPNf0y9hphioNdIcetiZJD9yfYVpGaXbYOuZYkFVNP0WPRC6BMhNUy9uhzwXbJ+hXGSUZClauqUwFcQF0TCQ7j/5fkQRR0m1vmyDU7TOcTwgcbcycvKFg7zm2OR8ORHE8mUxEURxMDctx18EhQ0kcJ5+NhM/ABEnSQ9k/ib/bbT3PdRzH89bb3Z7WhCdhlHxCEj4JHzCOQkjyFor0PPy3NCKpzknSA/fHg0f60zBi+UKfl4Skpx64nnrgeuqB64HrqQeupx64HrieeuB66oHrqQeuB66nHrieeuB64HrqgeupB66nS8DBKL7Yr+W9z6q/FpMj6Ohjx8/s4vi9S1s+Rv2mcZ1a3eCXGDm/yc05ZvTS6L13UQIXJxnKLmTWk9ZL2ZWse/JdCU/6IH8m4S08Y0hSdnGGUnjhSkge8ZbaNtrfC53QtZ7nZ4x8cBXGJzdpnf0CYQRT+tz4yiRqXmkFcBAFm+UmaOwmhz9bLzeH9zrNxbwF2m6zIrTd+Qf6re0eNo7JxfstvzQhVzY9xmGzXAetG96RdNlkv6ZpXyUt378BY+Tg77Z1Rm5K8KOgoWD/obdBHiBl37/e7gO8kJuuy4GL0c4SxIHVVD0GyWcj8tmlL44gyg47z7HMmSASEham7Sz3IZaPuMXqRMhfOpY+oJfKlu3t0+wszx8i38afW9uWBW50EqBtCDTRsqCpYPvHiy8wPmNkTnqntGSkEHMM2ta1LXNMORIHKr7Jah+1uUkcZ+nes605/X7BsJxVwEd1NQEHk8AaGLoxsA4NLyCwRPyZYB/gJW7TnWvJ48FMpjnEmMBiKkxV2/MzdE3PYB29c8yJOFf5pXNxrDZU1sDIFvBjjM2g1YCHKAs8UxwrLLW5JENwsvii4KMmRiaYkf11Rgp2ko1rzUVRKm6iLiaDGbCX+G1ckTqseraONhbngF2pzAZTE7/FMz0r5L+/mZKSan1+vp4jtCbl1kCTm9c6aSvo6MKcDNoA1cR90uzHdHZN66V2+8A1BLlyMcBXjiTHr79frBNoy0ljvMpapLjGGVYTC/28GkSTrAvIU0aMRkZmLRjh2iOLVvZCINnw5U0AvclENF3//ZvEme/MRbUsYiEXLgbmEp4uYyFfnksyDU8Fi/MBvTFajeiIQ2nd8MZiiOVFGimNJYaaLovA9d9bqxF+waJy9n51IJorVF1nUbamVd/6xG0BHP5tMG1+pgWbHtHAyB6/tAuMGLKoOv7VOi2M/cYWp+qFt7HA0AVZfNl2RxtTBKd1tsCYi05woiZK4GYMuE0TcOJF4KI08gzxpGMWqFYUqgSBi6ZglK2M5hdsyCM3rogGhoJOGNbHLYDDt5UWerngK2RM7BA2vfL4OiPLK/0asHp2FpPLtZYAL2Rrk11Q9XivX0oLo+HbAd7DTkY3/SJwUba3K20FsWAbGn45ulFVfItxPjm4QU8upeJyzdDJpfmVmiY4f5er8xbg4mwtKVp+VyBXSRqsGva4kFg+VxkZXmSEv/itVREYfDW9iWGUUAJdktxDs3kVIW+Sd9YEGrnUKLq6GyNzV3vsXwMuyrbmOF+keLXKE0EYzeeLgYC392L1Ag1bpI0ME8HgLxjoylQYzOeiMJa1/EcDt1zhNwBHO7RpfM7HRJgbZpWW/4UND7I1iyaKlJFBEyO6eIERpuiypVJMG9SwRTIWhOl8PhcEaqfk6xEMmhtSkTFPXMo0TR4LE3KlpPIbGjPTT+FvAg7LC8h7i2MFPvhiOu5yvdlsVp5rm1LZKtKYmk194vEKBfkLlkXDJi0LV55jjjn7GHGvWGbtgcMOrM3aDgF9rDnLza5KQda01le6ZJSMYB+gwsj8KiPsW5E7U4q3IYmL/G0ssXthzEQ1v4k+bNplsX04Y5O2sIk4Nh1vTZo32vKIC6ExtoOKH/MrwGHcJvxJsQYQTWcTJOiN9/kMg5VjDHPlY0jG9ux1xzCwOET6xHT3Mbs0CTyscNiwMPXLNkeuPXBYjtmQOKCOnV21gocGTuKGC5ZTWS9mdtYZiYK1Yw7zDVOXtG3j18P46ApcrQJtNrLcbeUmB+ynAjGH1RifIwcTPx9EoommFyT8wp0jc9kwBm5FWf4CcPiaCcgnOosWcVLIDIcwiqIwjJM0Q75rilq+iM6RKzvgaaK9J5EFfG0Y4SsDd8QWnza1Dty0bA0chGxgNLZJph4LvVWpSU+upmrJCPE903NGeBdFfaE3IkeYMfJfGVrrgL2NiN4E4puke9cY8bdhjCz/pHF+nDkDttoAMQlIWR++kjSV3lh8KjaQKt/cCrjlsAG4KNuouZ6b6S5x76svBeurmDQgz407QzJPojKkxUw+odsNUWnqwTDNVgpDThfzId2tgcM6h7ovqjb0shZ9FjAjhcKWAGYENTPCF752xgi7iTfJoR2Zy0NWb+1Nwo/YubfH/IsMgQ6Tr1x/3C7Y9drIQ2n5MuIo8zly+tT+D7wJOJfORgTzTeWNEQOAizbesolzChvifgitzSlHbmrVm7LCI2+Ap4vuSQQ7Dv9ZzehGrX3J3eXWwEUZu682dtIW0UHCiKTlm8+2BSOzcw8+zjYSMyzwvmz7WdJ8k2SpM/iBbAZp7WUgZ8heBl5t9cBYhHw+FQjMyw22FXB0GimQ9UrkBB4P1sTguDnBpUhOHGN/YZDraKe6UiHa89c1ss/D7yGfHozvvsrCW4Aj0bspfV7TbxGPxorVHrdixLeFgpETdy5OffOLxhTd1I0utcGJ4NvWpNJzChy5AQ0vaBN8b3hqOu0N2sZYHziFeXIdOLJlkM/AomqPlr2s9aHz9zsNe0Lsk/LOktq46kHlg53pfePzvZ5PxdSHNisHbgscliCDqFm9vk4uu3wFI6ITtmNEHy5rjwDjyGbyAtTRu+o5zPZ4vWvAEO2wKrUh7+LY/DKiN2+ocbjztXgduOi408mLAJIVViOBvJU1Zjd+dyOJ00NunC/MoNySYWjTrQjvYlnY9P63FCdVMdh6aQscdslEdt/1MWyB205RQY7bFUZCp2CkZltgb4Ljpk2898PIRO8J2Fs16oEQvG2wlyF4jWHFwKICrc02+dK/Dly+JLEQF5oH4rc+5ZrMgccrAe80oCJLDdricWPElQPWaE03gHFo51srH7jYFrgNjYnLZov53oSRSc5InL7PSJQGnGtjWJXm+MiHi5MN6lr4P0p9x7LsXU2Lw+RgkTsAxdg3jWn68cbsb63k/SpwED+VzAyhUj/EaM0MN51s1PHVVb1njJHnQvGJYIydSwAw/YAXMf3e1sChJWESA9eiMyVhhK4prRUj+WIDila5ObbeBG5YONcPXEkfK//nqYHtawpdPc2DCLH6URS2ybUGLsrcIfcby2gPXqfs12Us8q1C9VKujvInzr1DQ/Deoua3tFXoNYJDVWl74FbtgYORPaGMKPou+xgjxBpiS5scGB1bmENRmp7oZMyryoBzmrYN9hWASJydx92vARdmG7bV6GO76BkSoY0EmJnTuD81nMbz3SHfsMizcttkum5+YzANdJmtwg+pSiBfn8YYIe49EUba9LGJcqtd0QuTNbeyVG26aXWT5GwrLXibND8GUaXEZdEmhU1zBTg6yZfpksm6MAlh6jCVKxVxjas6hhm02jh/MqxfyCsACriQikBWGdFLeMVA8rDtJW5LV5UhXMciTh22f0tW0JYRNmCEOPdRYXVPud/49webGOW8abPVbwEuJpNFmXOKN7NDbr/Cn1w36MNVy86dGCbmFE/y/IccuIs2BHnY+QeAo+9Wo1bw4UqyQaHk9MEyu40RncTi+ELZsUAEkHdZ/CcAR2bmbfLoCJhtKgYh0/QtdTozvJi3jS/jOBXAGZeASwNDVm8HDsK/mTlKpDuEV4JjXygj8xsY8Q2FMqIUjHhDPd9LkscBtw4PISY6fs13F3yyaC3q8SNjCoaEqtrqBpiwzUEXli2Bw440tbRIcs+P20JeHjen5FWWvAcdtrJvZ4RPqigZObJIAQkvhA8EbvsPH78W7spRh8bICorlhO9iMxtabj8bFn/BUOfeYDvgouOKyrU+dG+yKkksDbA450L2wiy5mEZcMALm2xsYWRWMQK6ZiXMM5i2zz/4l4GSXpnCuyGBmccGP/uqR/TyuBr5Yh7Tto+Zjw7C/xA6grwKH5XrADiWWN/lx5EQzPyFRRXtFM0obvWJYMhLczohksUnV2JIny6Qan6hbkNFlin8bcKoq5vPXpCL1Sp/WDAhsadJ1ip2OW1YVZBHPfGFeA66w37Bc3+QOkJiBb/IgvD4bWs42yMj5VsOZ827KGYHthQVCFsPmods8ylieP53YrfkIySbK0+F/B3DF/LUix0ibWPuq8Yhtk8J1/tEatxg5E60C1DXgIn7KSlyOBCY35pxsFH6irenz8dRy1kGSIRifur0basUYgvtxRiLkCWzPa3LiSGL/+jJt0/S3AXeeDSjZQW3XjdFypN+8G+dAqQvG4BXgoozFTbClzuObt2R54d9VixwSTZsP5qaz3CNUn6pDsnOoWTG6kRE6G4YfT8Kfrqhxczk6l7e1Ob9MC8lh1uy/Ahz2tOp5kcXB6mKTRTfwuxQr/F4BLkQ+Tz8owps35VWSRDlBLTOugDwWTJoCXolaYEP+Q4ycZHLw08qGCBs2k4yZBi6TTg7C68Adw/icovgDwOFXLTrVTEDOL36luxvmC+X85sv7PeDocf3sJA5/E3BkSLgDRLVIaASaIc8GprND1eAwZ0Tf/gIjDDjiCp4dpIVv3vuz0oBi0qyhCnD/oEb6eRW4vE6hMmSUnMYHDfx+CDhDWL6dAHeMYJWI479lUSTyUvNzjtuAI0H4raMPJU2rpOGTPPJ9kQJeMKJtP8SI91YDzm8Azr0y5E6b0Nh2zhtY2O4Fovbve8BNB5zEiVRMizIwcmn8eySOB5WrElex6NIUEccfSHmWQBFwvBE4klec7l1rMp6Xw4lJHrmxLA8ofkniJquKqvygxKlgX5U4FUyFfKxynQbs/OEycLKz5IQ9OXVQZAIK9uFkoeLf/U17XERjNZQOQeBvHFPIHX/RLpKlbgWOFbsF+G60dibXmVjq3ATCGiP/2h6HHcWJ3ry9cVVp1IEjafjNBN4HDu/T/xTd3w9Y14zzTMDy8Do3xoo0npusSiCzaCj/N/6JZVfIsvRZ6fhPK4mjtwNHy0szbJCTarV5XgQAsPWfB29yRpa3W5XEPEbUqnRE7VKIGdtIptRMIM+BqAN3ZZTae7HKv2kSZ0wSr7Js70x4br/2fzbFgcymruRvc3/Mmh+HSZpMS5ovlCJV35iZFRP7I8CxOSAEO8cU86RXoI9zbb0Zah9npO7HGRf9uFUTLVn4Zc5iNr8DuNqxTozQkieLku+IuV1eBBxuiZzEjZET5miVVE5dBwZJ14ySXwOOYkcqsv2V/YVnBGv4GYj7FKPd7AORk/gkcrJ6N3KSNEZO/vEBPfHmQJTAXfQcbgKOVvttDJYIU+SckFglWS5g8ZEQ38z6TzVWebmSTBVsv545/UHgWMAwJSWH4zyDl5o8JSPm7YwAyYqSaqxyaqetY5WHv9nrznNISuAU+QLdCFwCw2wj13OKSVB9wjb19qcD4XE5MBpOBy7AZqgiOBln+ivA0e0OZpE71CrVxISR8a2nA+FxNTg7HWDo+63FNg+gnyZCYfEwL5B2I3A0p5gtVH2wZCG9HxkLI95wjAVhysDWhdUpcPXaelJRqCwEFbvK9ayrXwSO3AFm7oQjR8snfmTleVzrngqpwwOcS/amYsQzd0erts8Vozyfb14PoGuS5+/9JtrfmHPCtgh+ojy1D3x7qpyAt2xdcdz/X6XiuFSBm8+qNBWFqWq5O3SaoPjrwJEDHzaDWh94hM2YJD1xZdKeEXYCDtTTE/Ch3XYCU+FRLE4C6B+PnDTVDkRF1rLCOp3AlCWL3ZKqkVVyTup7HHYHrIJsy3ac5e6Azoes/wbgsPbYyqBU2ISRxa8yUrweIG1RyySvA8tuNARehPDrscom4GB8ZDnk2oyzV8nyapsctefJUeJplpdsbA/BoaDgQPsgxfHFU+JfAY6YhIRPbCJRSwLysyNi696Y5SVWsry4rhzbx1YPhjlhm09R//S7s7yKo7EVWyADnq6JLakvoJ6kduVRecYJqaBJT7K8sDt0opqbW2f9FuB45VEOHGaEWV5tt+s8rxKUCaLk3Yls55yu24TO4DGwaAoWzW5M/kXgIPJ1nm8VsctgXEkAjltoqBW3b4bF+f7FIPO1vIxfBI6GPXLgEvjfnBHQMpN5csoIcbJ5iRRWQC2Qi/JNgkRson8VOHIZS7Pg/k6UbSbtU+6jjCtKoGi7MnB2JefkLsBF2XZaeAhpG0ZY7UCRZch+zGPJ2JM/Xk3Rw3x8AXlI4+Tk4zcDVwRSeWSNldKwqg9DdJIr5bpRyioNT6t1HgMcjVeVEhf/XTBiR1cYiQtGqqUDrAqKpZ/qgnsllTMJi9xwLHAoTv5V4PgeXim2qZaVuehdmYtQwGxwbHVjE+CxwMGQvvoyzBGjHcirzZ1jW0Yu1seB6TJ7V+ZIZSPPDccg/L4sr2bgeB0RUMqji0rHhKFzeMcMJuzmnnal/OAxwJH4lEKrXipnHd4grzP9ECNUblMnb9Ax8y73vyI9bHZ5PXeV8TsCR3yRvHR6YAfZhUaMcfy2y7s9YK1aDWA/BDj8glmMsHhBhJFhyQi6yAgpAm5ihLnlZQ340A0vFTdGSbY2paIcGZ11TboDcNWuCwZpVoCihjruCKFV0axgYgWVZkwPAA6Gbyu2R8k1RorOMMbY2qLLjHDc9Om59xpnm3nZdWHf1HUBxjA7VHP6jxF8BHDkkFAu2oMoLukoWnta2g9570x4nxP9pD3I/YHDQrPlER/ROVaTn7bKImdEdi4xMr3ASK5Il0Uvnqnpka4v1Ztgay5BycYagLwxR62/012BI1n0OXKaOjA9H2UpeUJMZNGiLNm7RsGNZNYdpX8TOBhFZ1EjmBChWXBDvJZkgu+sVBhxb2Mk/0rkjfMONfLAWgZZRn5a3uSwseezvLGUWPf47gscQy5/lMXQdFZ+xDOuUXLwl7Za9PI6Z/dfBI4c3Z8GaTMUbh2JwYP3qP/UDx7e1qeMhDVGwDuMFDKVecM8lUSXxqazDiDKM80PO8+aFj0NsUque+p3Bg7btmXCMMDrTDIsx6MH865jGZOybacxPmP3XwQuhRvvjFxLHjKh0c7zejAj2mVGpmXjuwZGqshN5LKXIO0nTm/iuY6pidM8URDoguXX3/K9gTtv8ygNeTbZeC5rRSIx3a+j5D7AQXhwhuf5bWLe+RHbfavzvtOYkUHJiFYwItQZEd7rVxmjlTo11PJtzHgFzWCyUIo0M00ZOKeRsbsDR/qt1BqrAp0VjZTZtKSR4IS0WkruBBx9WONCfhux+hqTQzgj4HZGarblrtYhVssraCpttfWZ4p01CL4/cJhheN7KuJaEIA/MdZo0ZK79W6oyP11uJF0ZeKgpkh2h5GOM1J8xcBdj7XJPZmMhYtfp7Pt/CbiLXdCLMAlQjXNDOE4QbR7e2EFa02WB9P1ueFN5euItwLXpgp5XK15IQZrJl3r/xBAzssBSd4kR470G5oWHj7b2eKI24q9rc8H0mhoyl6kLtwL33tyBIvytLeptgYu1Str1DyTSIh9UEvV5p/19c6f9GNGCQE0x9u2AI+0t+dyB9y848CDuKWj4ieYD7GFfPDnijMxuY+TMREnWtjKYa2c3UcQJaWKaNLZj3rKZCpNLJ3qxTXoVGhP7WG/ClsCDJWBtLNiHY+M7M2ZYVQvNa52kX+5daz4RpwteGKkr87E4Ve2ljy4tcOSbY3JPp+WsHNJ2izziwAp+vjscB3mCZpyRrszEkeUd3t2jCCMeZWSuFIxM3mfk7CZJlmxdS5qIs4XKvluTydswnFWALnTQrPB2Sd0MZMNQylBdARzaWwNBtP3m5EC0MQVBci61oyln62jcFjOsa7N1IClhE6ZO0HbKU5z69kggDfjhFYBdqaFqgk2puXJ4WDKis+KL4XVGzn1xiFCwJTdR2HfPTMt2136SJZdughW8LQrvjC+KEw+/WlDaVZVpVoftZntpYhVE/mazS9LLb7UYArUhtN378Nr8JpKevdnCtH0OMYL4Ea8fMqfpbnNGl+dC/TIjTTchY8TIbK/8u1M6igy+wxt9/e+8DLTfbPZllodQizdkF1M64xQ//ruywcau5QnXbcauxe9+44WQSJZc76wWo8ZC+ZZj4G5n5PpN6Eg8eJ239wa9kSyquAE4EuF7Z0mQTOpWj8sbQbTh9f1v/IULGltTwBvf+w2MXL3J73gZcVQ9t+hnpHaUeuB64HrqgeupB+6z0v8HfGEgl4/1TmwAAAAASUVORK5CYII=" alt="Kopi Soga" />
+        <div class="brand-divider"></div>
+        <div class="brand-module-title">
+          <h1>Backoffice &amp; Kalkulator HPP v6</h1>
+          <p>Sistem Kendali HPP, Pricing, Profit &amp; Stock Opname Barista</p>
+        </div>
+      </div>
+
+      <div class="topbar-actions no-print">
+        <button class="btn btn-orange" onclick="loadSampleSupplierPrices()" title="Isi simulasi harga pasar bahan baku untuk melihat hasil perhitungan instan">&#9889; Isi Simulasi Harga Bahan</button>
+        <button id="btnBackupJson" class="btn btn-outline-light" onclick="exportBackupJSON()">&#128190; Backup JSON</button>
+        <button class="btn btn-outline-light" onclick="configureGasUrl()" title="Atur Web App URL Google Apps Script untuk Auto-Backup ke Google Drive">&#9881; URL Drive</button>
+        <button class="btn btn-outline-light" onclick="document.getElementById('importFile').click()">&#128194; Restore</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importBackupJSON(event)" />
+        <button class="btn btn-outline-light" onclick="window.print()">&#128424; Cetak</button>
+        <button class="btn btn-outline-light" onclick="resetAllData()">&#8635; Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 8-MODULE NAVIGATION BAR (COVERING ALL 9 EXCEL SHEETS) -->
+  <div class="module-nav-wrap no-print">
+    <nav class="module-nav" id="moduleNav">
+      <button class="nav-pill active" data-tab="master"><span class="pill-num">1</span>Master Bahan (22)</button>
+      <button class="nav-pill" data-tab="prep"><span class="pill-num">2</span>HPP Preparation (7)</button>
+      <button class="nav-pill" data-tab="recipes"><span class="pill-num">3</span>Resep Saji &amp; Botolan (28)</button>
+      <button class="nav-pill" data-tab="pricing"><span class="pill-num">4</span>Rekap HPP &amp; Pricing</button>
+      <button class="nav-pill" data-tab="bep"><span class="pill-num">5</span>Proyeksi Profit &amp; BEP</button>
+      <button class="nav-pill" data-tab="promo"><span class="pill-num">6</span>Bundling &amp; Happy Hour</button>
+      <button class="nav-pill" data-tab="belanja"><span class="pill-num">7</span>Belanja &amp; Modal Stok</button>
+      <button class="nav-pill" data-tab="opname"><span class="pill-num">8</span>Kartu Stok &amp; Opname</button>
+    </nav>
+  </div>
+
+  <main class="container">
+
+    <!-- ========================================================= -->
+    <!-- TAB 1: MASTER BAHAN BAKU & KEMASAN (Sheet 1)              -->
+    <!-- ========================================================= -->
+    <section class="tab-panel active" id="tab-master">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <h2>1. Master Database Bahan Baku &amp; Kemasan</h2>
+          <p>Isi <strong>Harga Beli (Rp)</strong> &amp; <strong>Isi per Kemasan</strong> sesuai nota supplier. Harga per satuan pakai otomatis terhubung ke seluruh resep.</p>
+        </div>
+        <div class="param-item">
+          <label for="masterCatFilter">Filter Kategori:</label>
+          <select id="masterCatFilter" onchange="renderMasterTable()">
+            <option value="ALL">Semua Kategori (22 Item)</option>
+            <option value="Kopi">Kopi</option>
+            <option value="Dairy">Dairy</option>
+            <option value="Powder & Cream">Powder &amp; Cream</option>
+            <option value="Pemanis">Pemanis</option>
+            <option value="Fruit & Syrup">Fruit &amp; Syrup</option>
+            <option value="Tambahan">Tambahan</option>
+            <option value="Air & Es">Air &amp; Es</option>
+            <option value="Kemasan">Kemasan</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Total Item Master</div>
+          <div class="kpi-value" id="kpiMasterCount">22 Item</div>
+          <div class="kpi-sub">17 Bahan Baku + 5 Kemasan</div>
+        </div>
+        <div class="kpi-card accent">
+          <div class="kpi-label">Item Sudah Terisi Harga</div>
+          <div class="kpi-value" id="kpiMasterFilled">0 / 22</div>
+          <div class="kpi-sub">Otomatis tersimpan di browser</div>
+        </div>
+        <div class="kpi-card terracotta">
+          <div class="kpi-label">HPP Kopi Espresso / gr</div>
+          <div class="kpi-value" id="kpiEspressoGram">Rp 0</div>
+          <div class="kpi-sub">Basis 18 gr / single shot</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">HPP Susu UHT / ml</div>
+          <div class="kpi-value" id="kpiUhtMl">Rp 0</div>
+          <div class="kpi-sub">Komponen utama Latte &amp; KSS</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Kode</th>
+                <th>Nama Bahan / Kemasan</th>
+                <th>Kategori</th>
+                <th>Satuan Beli</th>
+                <th class="num">Harga Beli (Rp)</th>
+                <th class="num">Isi / Kemasan</th>
+                <th class="center">Satuan Pakai</th>
+                <th class="num">Harga per Satuan Pakai</th>
+              </tr>
+            </thead>
+            <tbody id="masterTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- TAB 2: HPP PREPARATION (Sheet 2)                          -->
+    <!-- ========================================================= -->
+    <section class="tab-panel" id="tab-prep">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <h2>2. Perhitungan HPP Bahan Preparation (Semi-Finished)</h2>
+          <p>Biaya per batch dan biaya per ml/gr untuk 7 bahan olahan bar Kopi Soga. Takaran &amp; yield dapat disesuaikan dengan kalibrasi bar.</p>
+        </div>
+      </div>
+      <div class="prep-grid" id="prepGridContainer"></div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- TAB 3: HPP MENU SAJI & BOTOLAN (Sheet 3 & 4)              -->
+    <!-- ========================================================= -->
+    <section class="tab-panel" id="tab-recipes">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <h2>3. Rincian Resep &amp; HPP Menu Saji + Menu Botolan</h2>
+          <p>Seluruh 28 varian menu Kopi Soga. Ubah angka takaran (gram/ml) jika ingin menguji perubahan gramasi resep.</p>
+        </div>
+        <div class="param-item">
+          <label for="recipeGroupFilter">Kelompok Menu:</label>
+          <select id="recipeGroupFilter" onchange="renderRecipes()">
+            <option value="ALL">Semua 28 Varian Menu</option>
+            <option value="SAJI">Menu Saji (7 Varian)</option>
+            <option value="BOTOL_KSS">Botolan - KSS (3 Ukuran)</option>
+            <option value="BOTOL_MOCKTAIL">Botolan - Mocktail (6 Varian)</option>
+            <option value="BOTOL_COFFEE">Botolan - Coffee Base (6 Varian)</option>
+            <option value="BOTOL_NONCOFFEE">Botolan - Non-Coffee (6 Varian)</option>
+          </select>
+        </div>
+      </div>
+      <div class="prep-grid" id="recipesGridContainer"></div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- TAB 4: REKAP HPP & PRICING (Sheet 5)                      -->
+    <!-- ========================================================= -->
+    <section class="tab-panel" id="tab-pricing">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <h2>4. Rekapitulasi HPP &amp; Evaluasi Harga Jual Kopi Soga</h2>
+          <p>Harga jual aktual sudah terisi sesuai daftar menu digital final Kopi Soga. Pantau Food Cost (%) &amp; Profit Kotor tiap varian.</p>
+        </div>
+      </div>
+
+      <div class="param-bar">
+        <div class="param-item">
+          <label for="wasteBufferInput">Buffer Waste / Susut (%):</label>
+          <input type="number" id="wasteBufferInput" class="sm" step="0.5" min="0" max="50" onchange="updateParam('wastePct', this.value)" />
+        </div>
+        <div class="param-item">
+          <label for="targetFcInput">Target Food Cost Ideal (%):</label>
+          <input type="number" id="targetFcInput" class="sm" step="1" min="5" max="90" onchange="updateParam('targetFcPct', this.value)" />
+        </div>
+        <button class="btn btn-soft no-print" onclick="restoreFinalMenuPrices()">&#8634; Kembalikan Harga Menu Final Kopi Soga</button>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Rata-Rata HPP + Waste</div>
+          <div class="kpi-value" id="kpiAvgHpp">Rp 0</div>
+          <div class="kpi-sub">Seluruh 28 varian menu</div>
+        </div>
+        <div class="kpi-card accent">
+          <div class="kpi-label">Rata-Rata Harga Jual</div>
+          <div class="kpi-value" id="kpiAvgPrice">Rp 0</div>
+          <div class="kpi-sub">Menu saji &amp; botolan</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Rata-Rata Profit Kotor</div>
+          <div class="kpi-value" id="kpiAvgGross">Rp 0</div>
+          <div class="kpi-sub">Margin kotor per unit</div>
+        </div>
+        <div class="kpi-card terracotta">
+          <div class="kpi-label">Rata-Rata Food Cost</div>
+          <div class="kpi-value" id="kpiAvgFc">0.0%</div>
+          <div class="kpi-sub">Target ideal &le; 30.0%</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama Menu</th>
+                <th>Kategori</th>
+                <th class="num">HPP Bahan</th>
+                <th class="num">HPP Kemasan</th>
+                <th class="num">Total HPP + Waste</th>
+                <th class="num">Rekomendasi Jual</th>
+                <th class="num">Harga Jual Aktual</th>
+                <th class="num">Profit Kotor / Unit</th>
+                <th class="center">Food Cost (%)</th>
+              </tr>
+            </thead>
+            <tbody id="pricingTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- TAB 5: PROYEKSI PROFIT & BEP (Sheet 6)                    -->
+    <!-- ========================================================= -->
+    <section class="tab-panel" id="tab-bep">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <h2>5. Proyeksi Profit Harian, Biaya Operasional &amp; Titik Impas (BEP)</h2>
+          <p>Isi Biaya Operasional Tetap (Fixed OpEx) bulanan dan Target Penjualan Cup/Botol per hari untuk menghitung BEP dan skenario Sepi–Normal–Ramai.</p>
+        </div>
+      </div>
+
+      <div class="param-bar">
+        <div class="param-item">
+          <label for="opDaysInput">Hari Operasional / Bulan:</label>
+          <input type="number" id="opDaysInput" class="sm" min="1" max="31" onchange="updateParam('opDays', this.value)" />
+        </div>
+        <div class="param-item">
+          <label for="targetNetMarginInput">Target Net Profit Margin (%):</label>
+          <input type="number" id="targetNetMarginInput" class="sm" step="1" min="0" max="80" onchange="updateParam('targetNetMarginPct', this.value)" />
+        </div>
+        <button class="btn btn-orange no-print" onclick="loadSampleSalesAndOpex()">&#9889; Isi Simulasi Target Cup &amp; OpEx</button>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Proyeksi Omzet / Hari</div>
+          <div class="kpi-value" id="kpiDailyRev">Rp 0</div>
+          <div class="kpi-sub" id="kpiMonthlyRevSub">Bulanan: Rp 0</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Proyeksi Laba Bersih / Hari</div>
+          <div class="kpi-value" id="kpiDailyNet">Rp 0</div>
+          <div class="kpi-sub" id="kpiMonthlyNetSub">Bulanan: Rp 0</div>
+        </div>
+        <div class="kpi-card terracotta">
+          <div class="kpi-label">Titik Impas (BEP) / Hari</div>
+          <div class="kpi-value" id="kpiBepCup">0 Cup</div>
+          <div class="kpi-sub" id="kpiBepOmzetSub">BEP Omzet: Rp 0 / hari</div>
+        </div>
+        <div class="kpi-card accent">
+          <div class="kpi-label">Target Capai Net Margin</div>
+          <div class="kpi-value" id="kpiTargetCup">0 Cup</div>
+          <div class="kpi-sub" id="kpiTargetCupSub">Minimal penjualan / hari</div>
+        </div>
+      </div>
+
+      <!-- A. FIXED OPEX -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">A. Rincian Biaya Operasional Tetap (Fixed OpEx) Outlet</div>
+          <span class="badge-tag">Alokasi Harian &amp; Bulanan</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Pos Biaya Operasional Tetap</th>
+                <th>Keterangan / Alokasi</th>
+                <th class="num">Biaya / Bulan (Rp)</th>
+                <th class="num">Biaya / Hari (Rp)</th>
+                <th class="num">Porsi OpEx (%)</th>
+              </tr>
+            </thead>
+            <tbody id="opexTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- B. RINGKASAN INDIKATOR PROFIT & BEP -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">B. Ringkasan Indikator Kinerja Keuangan &amp; BEP</div>
+          <span class="badge-tag orange">Real-Time Formula</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Indikator Kinerja Keuangan</th>
+                <th class="num">Proyeksi Harian</th>
+                <th class="num">Proyeksi Bulanan</th>
+                <th>Dasar Perhitungan</th>
+              </tr>
+            </thead>
+            <tbody id="bepSummaryBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- D. 3 SKENARIO PENJUALAN -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">C. Perbandingan 3 Skenario Penjualan Harian (Sepi, Normal &amp; Ramai)</div>
+          <div class="param-item" style="margin:0;">
+            <span>Sepi (%):</span>
+            <input type="number" id="scenLowInput" class="sm" min="10" max="100" onchange="updateParam('scenLowPct', this.value)" />
+            <span>Normal (%):</span>
+            <input type="number" id="scenNormInput" class="sm" min="50" max="200" onchange="updateParam('scenNormPct', this.value)" />
+            <span>Ramai (%):</span>
+            <input type="number" id="scenHighInput" class="sm" min="100" max="300" onchange="updateParam('scenHighPct', this.value)" />
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Indikator Skenario</th>
+                <th class="num">Skenario Sepi</th>
+                <th class="num">Skenario Normal (Baseline)</th>
+                <th class="num">Skenario Ramai</th>
+              </tr>
+            </thead>
+            <tbody id="scenarioTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- C. SALES MIX HARIAN PER MENU -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">D. Simulasi Target Penjualan Harian per Menu (Sales Mix)</div>
+          <span class="badge-tag">Terhubung ke Kalkulator Belanja &amp; Stok</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama Menu</th>
+                <th>Kategori</th>
+                <th class="num">HPP + Waste</th>
+                <th class="num">Harga Jual</th>
+                <th class="num">Margin / Unit</th>
+                <th class="num">Target / Hari (Cup)</th>
+                <th class="num">Omzet / Hari</th>
+                <th class="num">HPP / Hari</th>
+              </tr>
+            </thead>
+            <tbody id="salesMixTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- TAB 6: SIMULASI BUNDLING & HAPPY HOUR (Sheet 7)           -->
+    <!-- ========================================================= -->
+    <section class="tab-panel" id="tab-promo">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <h2>6. Simulasi Paket Bundling &amp; Promo Happy Hour</h2>
+          <p>Uji kombinasi paket bundling dan diskon jam sepi (off-peak) beserta dampaknya terhadap margin kotor dan titik impas (BEP) harian.</p>
+        </div>
+      </div>
+
+      <!-- A. PAKET BUNDLING -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">A. Simulasi Paket Bundling Minuman (Combo / Share Pack)</div>
+          <span class="badge-tag orange">6 Paket Kustom</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama Paket</th>
+                <th>Item Menu 1</th>
+                <th class="num">Qty 1</th>
+                <th>Item Menu 2</th>
+                <th class="num">Qty 2</th>
+                <th class="num">HPP Paket</th>
+                <th class="num">Normal</th>
+                <th class="num">Diskon (%)</th>
+                <th class="num">Harga Bundling</th>
+                <th class="center">FC (%)</th>
+                <th class="num">Profit / Paket</th>
+                <th class="num">Target / Hari</th>
+                <th class="num">Omzet / Hari</th>
+                <th class="num">Profit / Hari</th>
+              </tr>
+            </thead>
+            <tbody id="bundlingTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- B. PROMO HAPPY HOUR -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">B. Simulasi Promo Happy Hour (Diskon Jam Sepi / Off-Peak)</div>
+          <span class="badge-tag">6 Menu Promo</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Menu Promo Happy Hour</th>
+                <th class="num">HPP + Waste</th>
+                <th class="num">Harga Normal</th>
+                <th class="num">Diskon (%)</th>
+                <th class="num">Harga Happy Hour</th>
+                <th class="center">FC Normal</th>
+                <th class="center">FC Promo</th>
+                <th class="num">Margin Promo</th>
+                <th class="num">Target / Hari</th>
+                <th class="num">Omzet / Hari</th>
+                <th class="num">Profit / Hari</th>
+              </tr>
+            </thead>
+            <tbody id="happyHourTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- C. DAMPAK GABUNGAN -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">C. Analisis Dampak Gabungan Bundling &amp; Happy Hour vs Baseline</div>
+          <span class="badge-tag orange">Perbandingan Harian &amp; BEP</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Indikator Dampak Finansial &amp; BEP</th>
+                <th class="num">Tanpa Promo (Baseline)</th>
+                <th class="num">Dengan Bundling + Happy Hour</th>
+                <th class="num">Selisih / Dampak</th>
+              </tr>
+            </thead>
+            <tbody id="promoImpactBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- TAB 7: BELANJA BAHAN & MODAL STOK (Sheet 8)               -->
+    <!-- ========================================================= -->
+    <section class="tab-panel" id="tab-belanja">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <h2>7. Kalkulator Kebutuhan Belanja Bahan Baku &amp; Estimasi Modal Stok</h2>
+          <p>Otomatis menghitung batch produksi bahan preparation dan order belanja 22 item berdasarkan target penjualan harian pada Tab 5.</p>
+        </div>
+      </div>
+
+      <div class="param-bar">
+        <div class="param-item">
+          <label for="shopCycleInput">Periode Siklus Belanja (Hari):</label>
+          <input type="number" id="shopCycleInput" class="sm" min="1" max="60" onchange="updateParam('shopCycleDays', this.value)" />
+        </div>
+        <div class="param-item">
+          <label for="safetyStockInput">Safety Stock / Buffer (%):</label>
+          <input type="number" id="safetyStockInput" class="sm" min="0" max="100" onchange="updateParam('safetyStockPct', this.value)" />
+        </div>
+        <div class="param-item">
+          <span>Total Target Penjualan Harian: <strong id="shopDailyCupsBadge" style="color:var(--terracotta)">0 Cup/Botol</strong></span>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card terracotta">
+          <div class="kpi-label">Total Estimasi Modal Belanja</div>
+          <div class="kpi-value" id="kpiTotalShopModal">Rp 0</div>
+          <div class="kpi-sub" id="kpiShopCycleSub">Untuk siklus 7 hari</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Estimasi Modal Stok / Hari</div>
+          <div class="kpi-value" id="kpiDailyShopModal">Rp 0</div>
+          <div class="kpi-sub">Rata-rata belanja bahan harian</div>
+        </div>
+        <div class="kpi-card accent">
+          <div class="kpi-label">Total Kemasan Diorder</div>
+          <div class="kpi-value" id="kpiTotalOrderPacks">0 Pack/Bal</div>
+          <div class="kpi-sub">Pembulatan ke atas per kemasan beli</div>
+        </div>
+      </div>
+
+      <!-- A. PRODUKSI PREPARATION -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">A. Estimasi Kebutuhan Produksi Bahan Preparation (Semi-Finished)</div>
+          <span class="badge-tag">Jadwal Batch Bar</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama Bahan Preparation</th>
+                <th class="center">Satuan</th>
+                <th class="num">Kebutuhan Bersih / Hari</th>
+                <th class="num">Kebutuhan + Buffer / Hari</th>
+                <th class="num">Total Periode</th>
+                <th class="num">Yield / Batch</th>
+                <th class="num">Estimasi Produksi (Batch)</th>
+              </tr>
+            </thead>
+            <tbody id="prepNeedBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- B. DAFTAR BELANJA 22 ITEM -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">B. Daftar Belanja Bahan Baku &amp; Kemasan (22 Item)</div>
+          <span class="badge-tag orange">Isi Kolom Stok Tersisa</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Kode</th>
+                <th>Nama Bahan / Kemasan</th>
+                <th>Kategori</th>
+                <th class="num">Kebutuhan Periode</th>
+                <th class="num">Stok Tersisa (Input)</th>
+                <th class="num">Net Belanja</th>
+                <th class="num">Order Belanja</th>
+                <th class="num">Harga / Kemasan</th>
+                <th class="num">Estimasi Modal (Rp)</th>
+                <th class="num">Porsi (%)</th>
+              </tr>
+            </thead>
+            <tbody id="shoppingListBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- C. REKAP PER KATEGORI -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">C. Rekapitulasi Estimasi Modal Stok per Kategori</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Kategori Bahan / Kemasan</th>
+                <th class="num">Modal Belanja Periode</th>
+                <th class="num">Estimasi Modal / Hari</th>
+                <th class="num">Proyeksi / Bulan</th>
+                <th class="num">Porsi (%)</th>
+              </tr>
+            </thead>
+            <tbody id="shopCategoryBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- TAB 8: KARTU STOK & STOCK OPNAME BARISTA (Sheet 9)        -->
+    <!-- ========================================================= -->
+    <section class="tab-panel" id="tab-opname">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <h2>8. Kartu Stok Harian &amp; Formulir Stock Opname Barista</h2>
+          <p>Isi <strong>Stok Awal (Opening)</strong>, <strong>Masuk/Belanja (+)</strong>, <strong>Waste/Rusak (-)</strong>, dan <strong>Stok Fisik Closing</strong> untuk audit selisih stok harian.</p>
+        </div>
+      </div>
+
+      <div class="param-bar">
+        <div class="param-item">
+          <label for="opnameDate">Tanggal:</label>
+          <input type="date" id="opnameDate" onchange="updateOpnameMeta('date', this.value)" />
+        </div>
+        <div class="param-item">
+          <label for="opnameShift">Shift:</label>
+          <select id="opnameShift" onchange="updateOpnameMeta('shift', this.value)">
+            <option value="Full Day (Opening - Closing)">Full Day (Opening - Closing)</option>
+            <option value="Shift Pagi (Opening)">Shift Pagi (Opening)</option>
+            <option value="Shift Sore (Closing)">Shift Sore (Closing)</option>
+          </select>
+        </div>
+        <div class="param-item">
+          <label for="opnameBarista">Barista:</label>
+          <input type="text" id="opnameBarista" placeholder="Nama Barista" style="width:130px" onchange="updateOpnameMeta('barista', this.value)" />
+        </div>
+        <div class="param-item">
+          <label for="opnameVerifier">Verifikator:</label>
+          <input type="text" id="opnameVerifier" placeholder="Head Bar" style="width:130px" onchange="updateOpnameMeta('verifier', this.value)" />
+        </div>
+        <div class="param-item">
+          <label for="opnameTol">Toleransi Selisih (%):</label>
+          <input type="number" id="opnameTol" class="sm" step="0.5" min="0" max="20" onchange="updateOpnameMeta('tolerancePct', this.value)" />
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Status Audit Opname</div>
+          <div class="kpi-value" id="kpiOpnameStatus">AMAN / SESUAI</div>
+          <div class="kpi-sub" id="kpiOpnameAuditCount">0 Item perlu audit</div>
+        </div>
+        <div class="kpi-card terracotta">
+          <div class="kpi-label">Total Selisih Opname (Rp)</div>
+          <div class="kpi-value" id="kpiOpnameVarianceRp">Rp 0</div>
+          <div class="kpi-sub">(+) Surplus | (-) Susut / Hilang</div>
+        </div>
+        <div class="kpi-card accent">
+          <div class="kpi-label">Nilai Pemakaian Aktual</div>
+          <div class="kpi-value" id="kpiOpnameActualCogs">Rp 0</div>
+          <div class="kpi-sub">HPP riil bahan terpakai hari ini</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Nilai Persediaan Closing</div>
+          <div class="kpi-value" id="kpiOpnameClosingVal">Rp 0</div>
+          <div class="kpi-sub">Saldo modal stok fisik tutup bar</div>
+        </div>
+      </div>
+
+      <!-- A. TABEL STOCK OPNAME 22 ITEM -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">A. Kartu Stok Harian &amp; Formulir Stock Opname Barista (22 Item)</div>
+          <span class="badge-tag orange">Real-Time Audit</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Kode</th>
+                <th>Nama Bahan / Kemasan</th>
+                <th class="center">Satuan</th>
+                <th class="num">Stok Awal</th>
+                <th class="num">Masuk (+)</th>
+                <th class="num">Tersedia</th>
+                <th class="num">Est. POS</th>
+                <th class="num">Waste (-)</th>
+                <th class="num">Akhir Teori</th>
+                <th class="num">Fisik Closing</th>
+                <th class="num">Pakai Aktual</th>
+                <th class="num">Selisih</th>
+                <th class="center">% Selisih</th>
+                <th class="center">Status</th>
+                <th class="num">Nilai Selisih</th>
+                <th>Catatan</th>
+              </tr>
+            </thead>
+            <tbody id="opnameTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- B. VALUASI PERSEDIAAN HARIAN -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">B. Ringkasan Valuasi Persediaan &amp; Pemakaian Bahan Baku Harian (Rp)</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Komponen Pergerakan Stok Harian</th>
+                <th class="num">Total Nilai (Rp)</th>
+                <th>Keterangan</th>
+              </tr>
+            </thead>
+            <tbody id="opnameValuationBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="toast" id="toast">Tersimpan otomatis!</div>
+
+  <script>
+    /* ============================================================================
+       DATA MODEL & DEFAULT DEFINITIONS (100% MIRRORING Kalkulator_HPP_Menu_Barista_v6.xlsx)
+       ============================================================================ */
+    const STORAGE_KEY = 'kopi_soga_backoffice_v6_state';
+    // Tempel Web App URL Google Apps Script Anda di dalam tanda kutip di bawah (atau atur langsung lewat tombol ⚙️ URL Drive di aplikasi)
+    const DEFAULT_GAS_BACKUP_URL = "";
+    const GAS_URL_STORAGE_KEY = 'kopi_soga_gas_backup_url';
+
+    const DEFAULT_MATERIALS = [
+      { id: 'BHN-01', name: 'Biji Kopi Espresso (House Blend)', cat: 'Kopi', buyUnit: 'Pack / Kg', buyPrice: 0, packSize: 1000, useUnit: 'gr' },
+      { id: 'BHN-02', name: 'Susu UHT Full Cream', cat: 'Dairy', buyUnit: 'Karton / Liter', buyPrice: 0, packSize: 1000, useUnit: 'ml' },
+      { id: 'BHN-03', name: 'Creamer Powder', cat: 'Powder & Cream', buyUnit: 'Pack / Kg', buyPrice: 0, packSize: 1000, useUnit: 'gr' },
+      { id: 'BHN-04', name: 'Shineroad Whipping / Non-Dairy Cream', cat: 'Powder & Cream', buyUnit: 'Pack / Liter', buyPrice: 0, packSize: 1000, useUnit: 'gr' },
+      { id: 'BHN-05', name: 'Susu Kental Manis (SKM)', cat: 'Dairy', buyUnit: 'Kaleng / Pouch', buyPrice: 0, packSize: 490, useUnit: 'gr' },
+      { id: 'BHN-06', name: 'Gula Pasir', cat: 'Pemanis', buyUnit: 'Pack / Kg', buyPrice: 0, packSize: 1000, useUnit: 'gr' },
+      { id: 'BHN-07', name: 'Gula Aren', cat: 'Pemanis', buyUnit: 'Pack / Kg', buyPrice: 0, packSize: 1000, useUnit: 'gr' },
+      { id: 'BHN-08', name: 'Matcha Powder', cat: 'Powder & Cream', buyUnit: 'Pack', buyPrice: 0, packSize: 500, useUnit: 'gr' },
+      { id: 'BHN-09', name: 'Chocolate Powder', cat: 'Powder & Cream', buyUnit: 'Pack', buyPrice: 0, packSize: 500, useUnit: 'gr' },
+      { id: 'BHN-10', name: 'Goldenfield Strawberry Jam', cat: 'Fruit & Syrup', buyUnit: 'Pail / Pack', buyPrice: 0, packSize: 1000, useUnit: 'gr' },
+      { id: 'BHN-11', name: 'Goldenfield Blueberry Jam', cat: 'Fruit & Syrup', buyUnit: 'Pail / Pack', buyPrice: 0, packSize: 1000, useUnit: 'gr' },
+      { id: 'BHN-12', name: 'Sunquick Orange', cat: 'Fruit & Syrup', buyUnit: 'Botol', buyPrice: 0, packSize: 840, useUnit: 'ml' },
+      { id: 'BHN-13', name: 'Nutrisari / NTS Orange', cat: 'Fruit & Syrup', buyUnit: 'Renceng (10 Sachet)', buyPrice: 0, packSize: 10, useUnit: 'sachet' },
+      { id: 'BHN-14', name: 'Citrun / Citric Acid', cat: 'Tambahan', buyUnit: 'Pack', buyPrice: 0, packSize: 50, useUnit: 'gr' },
+      { id: 'BHN-15', name: 'Garam Halus', cat: 'Tambahan', buyUnit: 'Pack', buyPrice: 0, packSize: 250, useUnit: 'gr' },
+      { id: 'BHN-16', name: 'Air Mineral / Galon', cat: 'Air & Es', buyUnit: 'Galon (19L)', buyPrice: 0, packSize: 19000, useUnit: 'ml' },
+      { id: 'BHN-17', name: 'Es Batu Kristal', cat: 'Air & Es', buyUnit: 'Pack (5 Kg)', buyPrice: 0, packSize: 5000, useUnit: 'gr' },
+      { id: 'KMS-01', name: 'Cup Iced (Cup + Lid + Sedotan + Stiker)', cat: 'Kemasan', buyUnit: 'Pack (50 pcs)', buyPrice: 0, packSize: 50, useUnit: 'pcs' },
+      { id: 'KMS-02', name: 'Paper Cup Hot (Cup + Lid + Stirrer + Stiker)', cat: 'Kemasan', buyUnit: 'Pack (50 pcs)', buyPrice: 0, packSize: 50, useUnit: 'pcs' },
+      { id: 'KMS-03', name: 'Botol Plastik 250 ml + Tutup + Stiker', cat: 'Kemasan', buyUnit: 'Bal (100 pcs)', buyPrice: 0, packSize: 100, useUnit: 'pcs' },
+      { id: 'KMS-04', name: 'Botol Plastik 500 ml + Tutup + Stiker', cat: 'Kemasan', buyUnit: 'Bal (100 pcs)', buyPrice: 0, packSize: 100, useUnit: 'pcs' },
+      { id: 'KMS-05', name: 'Botol Plastik 1.000 ml (1L) + Tutup + Stiker', cat: 'Kemasan', buyUnit: 'Bal (50 pcs)', buyPrice: 0, packSize: 50, useUnit: 'pcs' }
+    ];
+
+    const DEFAULT_PREPS = [
+      {
+        id: 'PREP-ESPRESSO',
+        name: '1. Espresso Liquid (Konversi Gram ke ml)',
+        note: 'Standar 18 gr kopi menghasilkan ±36 ml espresso (ubah yield sesuai kalibrasi mesin)',
+        yieldUnit: 'ml',
+        yieldQty: 36,
+        items: [
+          { source: 'master', refId: 'BHN-01', qty: 18 }
+        ]
+      },
+      {
+        id: 'PREP-CREAMER',
+        name: '2. Creamer Cair (2 Jug @750 ml)',
+        note: '500gr creamer + 500ml air = 1L, dibagi 2 jug + masing-masing 250gr Shineroad & 4gr garam',
+        yieldUnit: 'ml',
+        yieldQty: 1500,
+        items: [
+          { source: 'master', refId: 'BHN-03', qty: 500 },
+          { source: 'master', refId: 'BHN-16', qty: 500 },
+          { source: 'master', refId: 'BHN-04', qty: 500 },
+          { source: 'master', refId: 'BHN-15', qty: 8 }
+        ]
+      },
+      {
+        id: 'PREP-GULA',
+        name: '3. Gula Cair (Simple Syrup)',
+        note: '500 gr gula pasir + 350 ml air panas dilarutkan (±670 ml cairan)',
+        yieldUnit: 'ml',
+        yieldQty: 670,
+        items: [
+          { source: 'master', refId: 'BHN-06', qty: 500 },
+          { source: 'master', refId: 'BHN-16', qty: 350 }
+        ]
+      },
+      {
+        id: 'PREP-AREN',
+        name: '4. Gula Aren Cair',
+        note: '500 gr gula aren + 350 ml air panas direbus hingga larut (±670 ml cairan)',
+        yieldUnit: 'ml',
+        yieldQty: 670,
+        items: [
+          { source: 'master', refId: 'BHN-07', qty: 500 },
+          { source: 'master', refId: 'BHN-16', qty: 350 }
+        ]
+      },
+      {
+        id: 'PREP-BERRY',
+        name: '5. Berry Jam Mix',
+        note: 'Campuran Goldenfield Strawberry, Blueberry, air, citrun, dan gula cair',
+        yieldUnit: 'gr',
+        yieldQty: 934,
+        items: [
+          { source: 'master', refId: 'BHN-10', qty: 500 },
+          { source: 'master', refId: 'BHN-11', qty: 250 },
+          { source: 'master', refId: 'BHN-16', qty: 150 },
+          { source: 'master', refId: 'BHN-14', qty: 9 },
+          { source: 'prep', refId: 'PREP-GULA', qty: 25 }
+        ]
+      },
+      {
+        id: 'PREP-ORANGE',
+        name: '6. Orange Juice Mix',
+        note: 'Campuran Sunquick, NTS Orange 2 sachet, air, dan citrun',
+        yieldUnit: 'ml',
+        yieldQty: 410,
+        items: [
+          { source: 'master', refId: 'BHN-12', qty: 50 },
+          { source: 'master', refId: 'BHN-13', qty: 2 },
+          { source: 'master', refId: 'BHN-16', qty: 350 },
+          { source: 'master', refId: 'BHN-14', qty: 4 }
+        ]
+      },
+      {
+        id: 'PREP-KSS',
+        name: '7. KSS Preparan (Base Kopi Susu Soga)',
+        note: 'Base siap racik untuk Kopi Susu Soga (KSS) cup maupun botolan',
+        yieldUnit: 'ml',
+        yieldQty: 1675,
+        items: [
+          { source: 'prep', refId: 'PREP-ESPRESSO', qty: 230 },
+          { source: 'prep', refId: 'PREP-CREAMER', qty: 300 },
+          { source: 'prep', refId: 'PREP-AREN', qty: 120 },
+          { source: 'master', refId: 'BHN-05', qty: 25 },
+          { source: 'master', refId: 'BHN-02', qty: 1000 }
+        ]
+      }
+    ];
+
+    /* 28 Menu Items with Exact Final Selling Prices from Kopi Soga Digital Menu */
+    const DEFAULT_MENUS = [
+      // 1-7: MENU SAJI
+      {
+        id: 'MNU-01', name: 'Cafe Latte', cat: 'Coffee Base', group: 'SAJI',
+        note: 'Hot Rp 20.000 / Iced Rp 22.000 (Default hitungan Iced)',
+        actualPrice: 22000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-01', qty: 18 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 150 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-17', qty: 130 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-01', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-02', name: 'Cappuccino', cat: 'Coffee Base', group: 'SAJI',
+        note: 'Hot Rp 20.000 / Iced Rp 22.000 (Double Espresso 36gr)',
+        actualPrice: 22000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-01', qty: 36 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 150 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-17', qty: 130 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-01', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-03', name: 'Americano', cat: 'Coffee Base', group: 'SAJI',
+        note: 'Hot Rp 17.000 / Iced Rp 17.000 (Single Espresso 18gr)',
+        actualPrice: 17000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-01', qty: 18 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-16', qty: 120 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-17', qty: 130 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-01', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-04', name: 'Matcha Latte', cat: 'Non-Coffee', group: 'SAJI',
+        note: 'Hot Rp 20.000 / Iced Rp 22.000',
+        actualPrice: 22000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-08', qty: 12 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-03', qty: 15 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-05', qty: 3 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-06', qty: 15 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 100 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-17', qty: 130 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-01', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-05', name: 'Chocolate', cat: 'Non-Coffee', group: 'SAJI',
+        note: 'Hot Rp 20.000 / Iced Rp 22.000',
+        actualPrice: 22000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-09', qty: 12 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-03', qty: 15 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-05', qty: 3 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-06', qty: 15 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 100 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-17', qty: 130 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-01', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-06', name: 'Americano Berry', cat: 'Coffee Mocktail', group: 'SAJI',
+        note: 'Iced Only — Best Seller',
+        actualPrice: 25000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-BERRY', qty: 40 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-16', qty: 80 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 8 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-01', qty: 23 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-17', qty: 140 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-01', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-07', name: 'Americano Orange', cat: 'Coffee Mocktail', group: 'SAJI',
+        note: 'Iced Only',
+        actualPrice: 25000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-ORANGE', qty: 80 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-16', qty: 50 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 5 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-01', qty: 23 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-17', qty: 140 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-01', qty: 1 }
+        ]
+      },
+
+      // 8-10: KSS BOTOL
+      {
+        id: 'MNU-08', name: 'KSS Botol 250 ml', cat: 'Botolan - KSS', group: 'BOTOL_KSS',
+        note: 'KSS Preparan 200 ml + Air 50 ml (Best Seller)',
+        actualPrice: 25000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-KSS', qty: 200 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-16', qty: 50 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-03', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-09', name: 'KSS Botol 500 ml', cat: 'Botolan - KSS', group: 'BOTOL_KSS',
+        note: 'KSS Preparan 400 ml + Air 100 ml',
+        actualPrice: 48000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-KSS', qty: 400 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-16', qty: 100 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-04', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-10', name: 'KSS Botol 1 Liter', cat: 'Botolan - KSS', group: 'BOTOL_KSS',
+        note: 'KSS Preparan 800 ml + Air 200 ml',
+        actualPrice: 95000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-KSS', qty: 800 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-16', qty: 200 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-05', qty: 1 }
+        ]
+      },
+
+      // 11-16: MOCKTAIL BOTOL
+      {
+        id: 'MNU-11', name: 'Americano Berry Botol 250 ml', cat: 'Botolan - Mocktail', group: 'BOTOL_MOCKTAIL',
+        note: 'Berry Jam 60gr, Air 160ml, Gula 8ml, Espresso 22ml',
+        actualPrice: 28000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-BERRY', qty: 60 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-16', qty: 160 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 8 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-ESPRESSO', qty: 22 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-03', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-12', name: 'Americano Berry Botol 500 ml', cat: 'Botolan - Mocktail', group: 'BOTOL_MOCKTAIL',
+        note: 'Berry Jam 120gr, Air 320ml, Gula 16ml, Espresso 45ml',
+        actualPrice: 53000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-BERRY', qty: 120 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-16', qty: 320 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 16 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-ESPRESSO', qty: 45 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-04', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-13', name: 'Americano Berry Botol 1 Liter', cat: 'Botolan - Mocktail', group: 'BOTOL_MOCKTAIL',
+        note: 'Berry Jam 240gr, Air 650ml, Gula 32ml, Espresso 80ml',
+        actualPrice: 105000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-BERRY', qty: 240 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-16', qty: 650 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 32 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-ESPRESSO', qty: 80 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-05', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-14', name: 'Americano Orange Botol 250 ml', cat: 'Botolan - Mocktail', group: 'BOTOL_MOCKTAIL',
+        note: 'Orange Juice 100ml, Air 120ml, Gula 5ml, Espresso 25ml',
+        actualPrice: 28000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-ORANGE', qty: 100 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-16', qty: 120 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 5 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-ESPRESSO', qty: 25 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-03', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-15', name: 'Americano Orange Botol 500 ml', cat: 'Botolan - Mocktail', group: 'BOTOL_MOCKTAIL',
+        note: 'Orange Juice 200ml, Air 240ml, Gula 10ml, Espresso 50ml',
+        actualPrice: 53000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-ORANGE', qty: 200 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-16', qty: 240 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 10 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-ESPRESSO', qty: 50 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-04', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-16', name: 'Americano Orange Botol 1 Liter', cat: 'Botolan - Mocktail', group: 'BOTOL_MOCKTAIL',
+        note: 'Orange Juice 400ml, Air 480ml, Gula 25ml, Espresso 100ml',
+        actualPrice: 105000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-ORANGE', qty: 400 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-16', qty: 480 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 25 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-ESPRESSO', qty: 100 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-05', qty: 1 }
+        ]
+      },
+
+      // 17-22: COFFEE BASE BOTOL
+      {
+        id: 'MNU-17', name: 'Cafe Latte Botol 250 ml', cat: 'Botolan - Coffee Base', group: 'BOTOL_COFFEE',
+        note: 'Sesuaikan takaran biji kopi & UHT jika perlu',
+        actualPrice: 25000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-01', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 0 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 0 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-03', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-18', name: 'Cafe Latte Botol 500 ml', cat: 'Botolan - Coffee Base', group: 'BOTOL_COFFEE',
+        note: 'Sesuaikan takaran biji kopi & UHT jika perlu',
+        actualPrice: 48000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-01', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 0 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 0 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-04', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-19', name: 'Cafe Latte Botol 1 Liter', cat: 'Botolan - Coffee Base', group: 'BOTOL_COFFEE',
+        note: 'Sesuaikan takaran biji kopi & UHT jika perlu',
+        actualPrice: 95000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-01', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 0 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 0 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-05', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-20', name: 'Cappuccino Botol 250 ml', cat: 'Botolan - Coffee Base', group: 'BOTOL_COFFEE',
+        note: 'Sesuaikan takaran biji kopi & UHT jika perlu',
+        actualPrice: 25000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-01', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 0 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 0 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-03', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-21', name: 'Cappuccino Botol 500 ml', cat: 'Botolan - Coffee Base', group: 'BOTOL_COFFEE',
+        note: 'Sesuaikan takaran biji kopi & UHT jika perlu',
+        actualPrice: 48000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-01', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 0 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 0 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-04', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-22', name: 'Cappuccino Botol 1 Liter', cat: 'Botolan - Coffee Base', group: 'BOTOL_COFFEE',
+        note: 'Sesuaikan takaran biji kopi & UHT jika perlu',
+        actualPrice: 95000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-01', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 0 },
+          { kind: 'Bahan', source: 'prep', refId: 'PREP-GULA', qty: 0 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-05', qty: 1 }
+        ]
+      },
+
+      // 23-28: NON-COFFEE BOTOL
+      {
+        id: 'MNU-23', name: 'Matcha Latte Botol 250 ml', cat: 'Botolan - Non-Coffee', group: 'BOTOL_NONCOFFEE',
+        note: 'Matcha 15gr terisi; lengkapi takaran bahan lainnya',
+        actualPrice: 26000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-08', qty: 15 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-03', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-05', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-06', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 0 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-03', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-24', name: 'Matcha Latte Botol 500 ml', cat: 'Botolan - Non-Coffee', group: 'BOTOL_NONCOFFEE',
+        note: 'Lengkapi takaran bahan pada kolom input',
+        actualPrice: 50000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-08', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-03', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-05', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-06', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 0 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-04', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-25', name: 'Matcha Latte Botol 1 Liter', cat: 'Botolan - Non-Coffee', group: 'BOTOL_NONCOFFEE',
+        note: 'Lengkapi takaran bahan pada kolom input',
+        actualPrice: 98000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-08', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-03', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-05', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-06', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 0 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-05', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-26', name: 'Chocolate Botol 250 ml', cat: 'Botolan - Non-Coffee', group: 'BOTOL_NONCOFFEE',
+        note: 'Lengkapi takaran bahan pada kolom input',
+        actualPrice: 26000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-09', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-03', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-05', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-06', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 0 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-03', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-27', name: 'Chocolate Botol 500 ml', cat: 'Botolan - Non-Coffee', group: 'BOTOL_NONCOFFEE',
+        note: 'Lengkapi takaran bahan pada kolom input',
+        actualPrice: 50000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-09', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-03', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-05', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-06', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 0 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-04', qty: 1 }
+        ]
+      },
+      {
+        id: 'MNU-28', name: 'Chocolate Botol 1 Liter', cat: 'Botolan - Non-Coffee', group: 'BOTOL_NONCOFFEE',
+        note: 'Lengkapi takaran bahan pada kolom input',
+        actualPrice: 98000, dailyTarget: 0,
+        items: [
+          { kind: 'Bahan', source: 'master', refId: 'BHN-09', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-03', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-05', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-06', qty: 0 },
+          { kind: 'Bahan', source: 'master', refId: 'BHN-02', qty: 0 },
+          { kind: 'Kemasan', source: 'master', refId: 'KMS-05', qty: 1 }
+        ]
+      }
+    ];
+
+    const DEFAULT_OPEX = [
+      { id: 'OPX-1', name: 'Gaji Barista & Kru Outlet', desc: 'Gaji pokok + uang makan/transport tim bar', monthly: 0 },
+      { id: 'OPX-2', name: 'Sewa Tempat / Kontrakan Outlet', desc: 'Alokasi sewa ruko/lahan per bulan', monthly: 0 },
+      { id: 'OPX-3', name: 'Listrik & Air PDAM', desc: 'Pemakaian mesin espresso, chiller, showcase & bar', monthly: 0 },
+      { id: 'OPX-4', name: 'Internet / Wi-Fi & Aplikasi Kasir (POS)', desc: 'Langganan internet outlet & sistem POS', monthly: 0 },
+      { id: 'OPX-5', name: 'Perlengkapan Kebersihan & Operasional Bar', desc: 'Sabun cuci, tisu, lap microfiber, sanitizer', monthly: 0 },
+      { id: 'OPX-6', name: 'Marketing, Konten & Promosi', desc: 'Iklan lokal, cetak promo, sampel menu', monthly: 0 },
+      { id: 'OPX-7', name: 'Penyusutan & Maintenance Peralatan', desc: 'Servis rutin mesin espresso, grinder, chiller', monthly: 0 },
+      { id: 'OPX-8', name: 'Biaya Tetap Lainnya', desc: 'Iuran lingkungan, keamanan, cadangan operasional', monthly: 0 }
+    ];
+
+    const DEFAULT_BUNDLINGS = [
+      { id: 'BND-1', name: 'Paket Duo Ngopi', item1: 'Cafe Latte', qty1: 2, item2: 'Americano', qty2: 0, discPct: 10, dailyTarget: 0 },
+      { id: 'BND-2', name: 'Paket Coffee & Mocktail', item1: 'Cafe Latte', qty1: 1, item2: 'Americano Berry', qty2: 1, discPct: 10, dailyTarget: 0 },
+      { id: 'BND-3', name: 'Paket Segar Berdua', item1: 'Americano Berry', qty1: 1, item2: 'Americano Orange', qty2: 1, discPct: 12, dailyTarget: 0 },
+      { id: 'BND-4', name: 'Paket Sweet & Bold', item1: 'Cappuccino', qty1: 1, item2: 'Chocolate', qty2: 1, discPct: 10, dailyTarget: 0 },
+      { id: 'BND-5', name: 'Paket Botolan Keluarga (1L + 500ml)', item1: 'KSS Botol 1 Liter', qty1: 1, item2: 'Americano Berry Botol 500 ml', qty2: 1, discPct: 12, dailyTarget: 0 },
+      { id: 'BND-6', name: 'Paket Custom Bundling 6', item1: 'Matcha Latte', qty1: 1, item2: 'Cafe Latte', qty2: 1, discPct: 10, dailyTarget: 0 }
+    ];
+
+    const DEFAULT_HAPPY_HOURS = [
+      { id: 'HH-1', menuName: 'Americano', discPct: 20, dailyTarget: 0 },
+      { id: 'HH-2', menuName: 'Cafe Latte', discPct: 15, dailyTarget: 0 },
+      { id: 'HH-3', menuName: 'Americano Berry', discPct: 15, dailyTarget: 0 },
+      { id: 'HH-4', menuName: 'Americano Orange', discPct: 15, dailyTarget: 0 },
+      { id: 'HH-5', menuName: 'Matcha Latte', discPct: 15, dailyTarget: 0 },
+      { id: 'HH-6', menuName: 'Chocolate', discPct: 15, dailyTarget: 0 }
+    ];
+
+    function buildDefaultState() {
+      const stockRem = {};
+      const opnameRows = {};
+      DEFAULT_MATERIALS.forEach(m => {
+        stockRem[m.id] = 0;
+        opnameRows[m.id] = { opening: 0, incoming: 0, waste: 0, closing: 0, note: '' };
+      });
+      return {
+        params: {
+          wastePct: 3,
+          targetFcPct: 30,
+          opDays: 30,
+          targetNetMarginPct: 20,
+          scenLowPct: 60,
+          scenNormPct: 100,
+          scenHighPct: 140,
+          shopCycleDays: 7,
+          safetyStockPct: 10
+        },
+        materials: JSON.parse(JSON.stringify(DEFAULT_MATERIALS)),
+        preps: JSON.parse(JSON.stringify(DEFAULT_PREPS)),
+        menus: JSON.parse(JSON.stringify(DEFAULT_MENUS)),
+        opex: JSON.parse(JSON.stringify(DEFAULT_OPEX)),
+        bundlings: JSON.parse(JSON.stringify(DEFAULT_BUNDLINGS)),
+        happyHours: JSON.parse(JSON.stringify(DEFAULT_HAPPY_HOURS)),
+        stockRem,
+        opname: {
+          date: new Date().toISOString().slice(0, 10),
+          shift: 'Full Day (Opening - Closing)',
+          barista: '',
+          verifier: '',
+          tolerancePct: 2,
+          rows: opnameRows
+        }
+      };
+    }
+
+    let state = loadState();
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return buildDefaultState();
+        const parsed = JSON.parse(raw);
+        const base = buildDefaultState();
+        return {
+          ...base,
+          ...parsed,
+          params: { ...base.params, ...(parsed.params || {}) },
+          opname: { ...base.opname, ...(parsed.opname || {}) }
+        };
+      } catch (e) {
+        return buildDefaultState();
+      }
+    }
+
+    let toastTimer = null;
+    function saveState(silent = false) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        if (!silent) {
+          const el = document.getElementById('toast');
+          el.classList.add('show');
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(() => el.classList.remove('show'), 1500);
+        }
+      } catch (e) {}
+    }
+
+    /* ============================================================================
+       FORMATTERS
+       ============================================================================ */
+    const fmtRp = (v) => {
+      if (!isFinite(v) || isNaN(v)) v = 0;
+      return 'Rp ' + Math.round(v).toLocaleString('id-ID');
+    };
+    const fmtRpDec = (v) => {
+      if (!isFinite(v) || isNaN(v)) v = 0;
+      return 'Rp ' + v.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    };
+    const fmtNum = (v, dec = 1) => {
+      if (!isFinite(v) || isNaN(v)) v = 0;
+      return v.toLocaleString('id-ID', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    };
+    const fmtPct = (v) => {
+      if (!isFinite(v) || isNaN(v)) v = 0;
+      return (v * 100).toFixed(1) + '%';
+    };
+
+    /* ============================================================================
+       CORE CALCULATION ENGINE (REPLICATING ALL EXCEL DEPENDENCIES)
+       ============================================================================ */
+    function computeAll() {
+      // 1. Master Materials unit price
+      const matMap = {};
+      state.materials.forEach(m => {
+        const unitCost = m.packSize > 0 ? (m.buyPrice / m.packSize) : 0;
+        matMap[m.id] = { ...m, unitCost };
+      });
+
+      // 2. Preparations (multi-pass so nested preps like Berry Jam -> Gula Cair & KSS -> Espresso/Creamer/Aren resolve cleanly)
+      const prepMap = {};
+      for (let pass = 0; pass < 3; pass++) {
+        state.preps.forEach(p => {
+          let batchCost = 0;
+          const computedItems = p.items.map(it => {
+            const uCost = it.source === 'master'
+              ? (matMap[it.refId]?.unitCost || 0)
+              : (prepMap[it.refId]?.unitCost || 0);
+            const label = it.source === 'master'
+              ? (matMap[it.refId]?.name || it.refId)
+              : (prepMap[it.refId]?.name.replace(/^\d+\.\s*/, '') || it.refId);
+            const unit = it.source === 'master'
+              ? (matMap[it.refId]?.useUnit || '')
+              : (prepMap[it.refId]?.yieldUnit || '');
+            const sub = it.qty * uCost;
+            batchCost += sub;
+            return { ...it, label, unit, uCost, sub };
+          });
+          const unitCost = p.yieldQty > 0 ? (batchCost / p.yieldQty) : 0;
+          prepMap[p.id] = { ...p, computedItems, batchCost, unitCost };
+        });
+      }
+
+      // 3. Menus HPP + Waste + Pricing
+      const wasteMult = 1 + (state.params.wastePct / 100);
+      const targetFcRatio = state.params.targetFcPct / 100;
+
+      const menuList = state.menus.map(mn => {
+        let hppBahan = 0;
+        let hppKemasan = 0;
+        const computedItems = mn.items.map(it => {
+          const uCost = it.source === 'master'
+            ? (matMap[it.refId]?.unitCost || 0)
+            : (prepMap[it.refId]?.unitCost || 0);
+          const label = it.source === 'master'
+            ? (matMap[it.refId]?.name || it.refId)
+            : (prepMap[it.refId]?.name.replace(/^\d+\.\s*/, '') || it.refId);
+          const unit = it.source === 'master'
+            ? (matMap[it.refId]?.useUnit || '')
+            : (prepMap[it.refId]?.yieldUnit || '');
+          const sub = it.qty * uCost;
+          if (it.kind === 'Kemasan') hppKemasan += sub;
+          else hppBahan += sub;
+          return { ...it, label, unit, uCost, sub };
+        });
+
+        const totalHppRaw = hppBahan + hppKemasan;
+        const totalHppWaste = totalHppRaw * wasteMult;
+        const recPrice = targetFcRatio > 0 ? (totalHppWaste / targetFcRatio) : 0;
+        const usedPrice = mn.actualPrice > 0 ? mn.actualPrice : recPrice;
+        const grossProfitUnit = mn.actualPrice > 0 ? (mn.actualPrice - totalHppWaste) : 0;
+        const actualFc = mn.actualPrice > 0 ? (totalHppWaste / mn.actualPrice) : 0;
+        const dailyRev = usedPrice * mn.dailyTarget;
+        const dailyHpp = totalHppWaste * mn.dailyTarget;
+
+        return {
+          ...mn,
+          computedItems,
+          hppBahan,
+          hppKemasan,
+          totalHppRaw,
+          totalHppWaste,
+          recPrice,
+          usedPrice,
+          grossProfitUnit,
+          marginUsed: usedPrice - totalHppWaste,
+          actualFc,
+          dailyRev,
+          dailyHpp
+        };
+      });
+
+      const menuByName = {};
+      menuList.forEach(m => { menuByName[m.name] = m; });
+
+      // 4. OpEx & BEP
+      const opDays = Math.max(1, state.params.opDays || 30);
+      const totalMonthlyOpex = state.opex.reduce((s, o) => s + (o.monthly || 0), 0);
+      const totalDailyOpex = totalMonthlyOpex / opDays;
+
+      const totalDailyCups = menuList.reduce((s, m) => s + (m.dailyTarget || 0), 0);
+      const dailyRev = menuList.reduce((s, m) => s + m.dailyRev, 0);
+      const dailyHpp = menuList.reduce((s, m) => s + m.dailyHpp, 0);
+      const dailyGross = dailyRev - dailyHpp;
+      const dailyNet = dailyGross - totalDailyOpex;
+
+      const avgPriceAll = menuList.reduce((s, m) => s + m.usedPrice, 0) / menuList.length;
+      const avgHppAll = menuList.reduce((s, m) => s + m.totalHppWaste, 0) / menuList.length;
+
+      const weightedAvgPrice = totalDailyCups > 0 ? (dailyRev / totalDailyCups) : avgPriceAll;
+      const weightedAvgHpp = totalDailyCups > 0 ? (dailyHpp / totalDailyCups) : avgHppAll;
+      const weightedContribMargin = weightedAvgPrice - weightedAvgHpp;
+
+      const bepDailyOmzet = (weightedAvgPrice > 0 && weightedContribMargin > 0)
+        ? totalDailyOpex / (weightedContribMargin / weightedAvgPrice)
+        : 0;
+      const bepDailyCups = weightedContribMargin > 0 ? Math.ceil(totalDailyOpex / weightedContribMargin) : 0;
+
+      const targetNetRatio = (state.params.targetNetMarginPct || 0) / 100;
+      const denomTarget = weightedContribMargin - (targetNetRatio * weightedAvgPrice);
+      const targetNetDailyCups = denomTarget > 0 ? Math.ceil(totalDailyOpex / denomTarget) : 0;
+
+      // 5. Bundling & Happy Hour
+      const bundlingRows = state.bundlings.map(b => {
+        const m1 = menuByName[b.item1];
+        const m2 = menuByName[b.item2];
+        const hpp = (b.qty1 * (m1 ? m1.totalHppWaste : 0)) + (b.qty2 * (m2 ? m2.totalHppWaste : 0));
+        const normalPrice = (b.qty1 * (m1 ? m1.usedPrice : 0)) + (b.qty2 * (m2 ? m2.usedPrice : 0));
+        const bundlePrice = normalPrice * (1 - (b.discPct / 100));
+        const fcPct = bundlePrice > 0 ? (hpp / bundlePrice) : 0;
+        const profitUnit = bundlePrice - hpp;
+        const dailyOmzet = bundlePrice * b.dailyTarget;
+        const dailyProfit = profitUnit * b.dailyTarget;
+        const dailyHppTotal = hpp * b.dailyTarget;
+        const dailyUnits = (b.qty1 + b.qty2) * b.dailyTarget;
+        return { ...b, hpp, normalPrice, bundlePrice, fcPct, profitUnit, dailyOmzet, dailyProfit, dailyHppTotal, dailyUnits };
+      });
+
+      const happyHourRows = state.happyHours.map(h => {
+        const m = menuByName[h.menuName];
+        const hpp = m ? m.totalHppWaste : 0;
+        const normalPrice = m ? m.usedPrice : 0;
+        const hhPrice = normalPrice * (1 - (h.discPct / 100));
+        const fcNormal = normalPrice > 0 ? (hpp / normalPrice) : 0;
+        const fcHh = hhPrice > 0 ? (hpp / hhPrice) : 0;
+        const marginNormal = normalPrice - hpp;
+        const marginHh = hhPrice - hpp;
+        const dailyOmzet = hhPrice * h.dailyTarget;
+        const dailyHppTotal = hpp * h.dailyTarget;
+        const dailyProfit = marginHh * h.dailyTarget;
+        return { ...h, hpp, normalPrice, hhPrice, fcNormal, fcHh, marginNormal, marginHh, dailyOmzet, dailyHppTotal, dailyProfit };
+      });
+
+      // 6. Shopping & Prep Production Requirements (exact formulas from Belanja_Bahan_&_Stok)
+      const tMap = {};
+      menuList.forEach(m => { tMap[m.id] = m.dailyTarget || 0; });
+
+      const cleanPrepDaily = {
+        'PREP-KSS': tMap['MNU-08'] * 200 + tMap['MNU-09'] * 400 + tMap['MNU-10'] * 800,
+        'PREP-BERRY': tMap['MNU-06'] * 40 + tMap['MNU-11'] * 60 + tMap['MNU-12'] * 120 + tMap['MNU-13'] * 240,
+        'PREP-ORANGE': tMap['MNU-07'] * 80 + tMap['MNU-14'] * 100 + tMap['MNU-15'] * 200 + tMap['MNU-16'] * 400
+      };
+      cleanPrepDaily['PREP-ESPRESSO'] =
+        tMap['MNU-11'] * 22 + tMap['MNU-12'] * 45 + tMap['MNU-13'] * 80 +
+        tMap['MNU-14'] * 25 + tMap['MNU-15'] * 50 + tMap['MNU-16'] * 100 +
+        (cleanPrepDaily['PREP-KSS'] / (prepMap['PREP-KSS'].yieldQty || 1675)) * 230;
+      cleanPrepDaily['PREP-CREAMER'] =
+        (cleanPrepDaily['PREP-KSS'] / (prepMap['PREP-KSS'].yieldQty || 1675)) * 300;
+      cleanPrepDaily['PREP-GULA'] =
+        tMap['MNU-01'] * 0 + tMap['MNU-02'] * 0 + tMap['MNU-06'] * 8 + tMap['MNU-07'] * 5 +
+        tMap['MNU-11'] * 8 + tMap['MNU-12'] * 16 + tMap['MNU-13'] * 32 +
+        tMap['MNU-14'] * 5 + tMap['MNU-15'] * 10 + tMap['MNU-16'] * 25 +
+        (cleanPrepDaily['PREP-BERRY'] / (prepMap['PREP-BERRY'].yieldQty || 934)) * 25;
+      cleanPrepDaily['PREP-AREN'] =
+        (cleanPrepDaily['PREP-KSS'] / (prepMap['PREP-KSS'].yieldQty || 1675)) * 120;
+
+      // Exact daily material usage across all menus & preps (matching Belanja_Bahan_&_Stok R18:R39)
+      const dailyMatUsage = {};
+      state.materials.forEach(m => { dailyMatUsage[m.id] = 0; });
+
+      // Sum direct menu material usages
+      menuList.forEach(mn => {
+        const tgt = mn.dailyTarget || 0;
+        if (tgt <= 0) return;
+        mn.items.forEach(it => {
+          if (it.source === 'master' && dailyMatUsage[it.refId] !== undefined) {
+            dailyMatUsage[it.refId] += tgt * it.qty;
+          }
+        });
+      });
+
+      // Add indirect material usage from preparations
+      state.preps.forEach(p => {
+        const prepNeed = cleanPrepDaily[p.id] || 0;
+        const yld = prepMap[p.id]?.yieldQty || 1;
+        if (prepNeed <= 0) return;
+        p.items.forEach(it => {
+          if (it.source === 'master' && dailyMatUsage[it.refId] !== undefined) {
+            dailyMatUsage[it.refId] += (prepNeed / yld) * it.qty;
+          }
+        });
+      });
+
+      return {
+        matMap,
+        prepMap,
+        menuList,
+        menuByName,
+        opDays,
+        totalMonthlyOpex,
+        totalDailyOpex,
+        totalDailyCups,
+        dailyRev,
+        dailyHpp,
+        dailyGross,
+        dailyNet,
+        weightedAvgPrice,
+        weightedAvgHpp,
+        weightedContribMargin,
+        bepDailyOmzet,
+        bepDailyCups,
+        targetNetDailyCups,
+        bundlingRows,
+        happyHourRows,
+        cleanPrepDaily,
+        dailyMatUsage
+      };
+    }
+
+    /* ============================================================================
+       RENDER FUNCTIONS
+       ============================================================================ */
+    function renderAll() {
+      const data = computeAll();
+      renderMasterTable(data);
+      renderPrepCards(data);
+      renderRecipes(data);
+      renderPricingTable(data);
+      renderBepSection(data);
+      renderPromoSection(data);
+      renderBelanjaSection(data);
+      renderOpnameSection(data);
+    }
+
+    function renderMasterTable(data = computeAll()) {
+      const catFilter = document.getElementById('masterCatFilter').value;
+      const tbody = document.getElementById('masterTableBody');
+      let filled = 0;
+      state.materials.forEach(m => { if (m.buyPrice > 0) filled++; });
+
+      document.getElementById('kpiMasterCount').textContent = state.materials.length + ' Item';
+      document.getElementById('kpiMasterFilled').textContent = `${filled} / ${state.materials.length}`;
+      document.getElementById('kpiEspressoGram').textContent = fmtRpDec(data.matMap['BHN-01'].unitCost);
+      document.getElementById('kpiUhtMl').textContent = fmtRpDec(data.matMap['BHN-02'].unitCost);
+
+      const rows = state.materials.filter(m => catFilter === 'ALL' || m.cat === catFilter);
+      tbody.innerHTML = rows.map(m => {
+        const uCost = data.matMap[m.id].unitCost;
+        return `
+          <tr>
+            <td><strong>${m.id}</strong></td>
+            <td><strong>${m.name}</strong></td>
+            <td><span class="badge-tag ${m.cat === 'Kemasan' ? 'orange' : ''}">${m.cat}</span></td>
+            <td>${m.buyUnit}</td>
+            <td class="num">
+              <input type="number" min="0" step="500" value="${m.buyPrice}"
+                onchange="updateMaterial('${m.id}', 'buyPrice', this.value)" />
+            </td>
+            <td class="num">
+              <input type="number" class="sm" min="1" step="1" value="${m.packSize}"
+                onchange="updateMaterial('${m.id}', 'packSize', this.value)" />
+            </td>
+            <td class="center">${m.useUnit}</td>
+            <td class="num"><strong style="color:var(--terracotta)">${fmtRpDec(uCost)}</strong> / ${m.useUnit}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderPrepCards(data = computeAll()) {
+      const container = document.getElementById('prepGridContainer');
+      container.innerHTML = state.preps.map((p, pIdx) => {
+        const comp = data.prepMap[p.id];
+        const rowsHtml = comp.computedItems.map((it, iIdx) => `
+          <tr>
+            <td>${iIdx + 1}</td>
+            <td>${it.label}</td>
+            <td class="num">
+              <input type="number" class="sm" min="0" step="1" value="${it.qty}"
+                onchange="updatePrepItem(${pIdx}, ${iIdx}, this.value)" />
+            </td>
+            <td class="center">${it.unit}</td>
+            <td class="num">${fmtRpDec(it.uCost)}</td>
+            <td class="num"><strong>${fmtRp(it.sub)}</strong></td>
+          </tr>
+        `).join('');
+
+        return `
+          <div class="prep-card">
+            <div>
+              <div class="prep-card-head">
+                <div>
+                  <h3>${p.name}</h3>
+                  <p>${p.note}</p>
+                </div>
+                <span class="badge-tag">${p.yieldUnit}</span>
+              </div>
+              <div class="table-wrap">
+                <table style="min-width:100%">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Bahan</th>
+                      <th class="num">Takaran</th>
+                      <th class="center">Sat</th>
+                      <th class="num">Harga Sat</th>
+                      <th class="num">Subtotal</th>
+                    </tr>
+                  </thead>
+                  <tbody>${rowsHtml}</tbody>
+                </table>
+              </div>
+            </div>
+            <div class="prep-summary-bar">
+              <div>Biaya 1 Batch: <strong>${fmtRp(comp.batchCost)}</strong></div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span>Yield:</span>
+                <input type="number" class="sm" min="1" value="${p.yieldQty}"
+                  onchange="updatePrepYield(${pIdx}, this.value)" />
+                <span>${p.yieldUnit}</span>
+              </div>
+              <div>HPP / 1 ${p.yieldUnit}: <span class="unit-cost-highlight">${fmtRpDec(comp.unitCost)}</span></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderRecipes(data = computeAll()) {
+      const grp = document.getElementById('recipeGroupFilter').value;
+      const container = document.getElementById('recipesGridContainer');
+      const filtered = data.menuList.filter(m => grp === 'ALL' || m.group === grp);
+
+      container.innerHTML = filtered.map(mn => {
+        const mIdx = state.menus.findIndex(x => x.id === mn.id);
+        const rowsHtml = mn.computedItems.map((it, iIdx) => `
+          <tr>
+            <td>${it.label}</td>
+            <td class="center"><span class="badge-tag ${it.kind === 'Kemasan' ? 'orange' : ''}">${it.kind}</span></td>
+            <td class="num">
+              <input type="number" class="sm" min="0" step="1" value="${it.qty}"
+                onchange="updateMenuRecipeQty(${mIdx}, ${iIdx}, this.value)" />
+            </td>
+            <td class="center">${it.unit}</td>
+            <td class="num">${fmtRp(it.sub)}</td>
+          </tr>
+        `).join('');
+
+        return `
+          <div class="prep-card">
+            <div>
+              <div class="prep-card-head">
+                <div>
+                  <h3>${mn.name}</h3>
+                  <p>${mn.note}</p>
+                </div>
+                <span class="badge-tag orange">${mn.cat}</span>
+              </div>
+              <div class="table-wrap">
+                <table style="min-width:100%">
+                  <thead>
+                    <tr>
+                      <th>Komponen</th>
+                      <th class="center">Jenis</th>
+                      <th class="num">Takaran</th>
+                      <th class="center">Sat</th>
+                      <th class="num">Biaya</th>
+                    </tr>
+                  </thead>
+                  <tbody>${rowsHtml}</tbody>
+                </table>
+              </div>
+            </div>
+            <div class="prep-summary-bar">
+              <div>Bahan: <strong>${fmtRp(mn.hppBahan)}</strong> | Kemasan: <strong>${fmtRp(mn.hppKemasan)}</strong></div>
+              <div>Total HPP: <span class="unit-cost-highlight">${fmtRp(mn.totalHppRaw)}</span></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderPricingTable(data = computeAll()) {
+      document.getElementById('wasteBufferInput').value = state.params.wastePct;
+      document.getElementById('targetFcInput').value = state.params.targetFcPct;
+
+      const count = data.menuList.length;
+      const avgHpp = data.menuList.reduce((s, m) => s + m.totalHppWaste, 0) / count;
+      const avgPrice = data.menuList.reduce((s, m) => s + m.actualPrice, 0) / count;
+      const avgGross = data.menuList.reduce((s, m) => s + m.grossProfitUnit, 0) / count;
+      const avgFc = data.menuList.reduce((s, m) => s + m.actualFc, 0) / count;
+
+      document.getElementById('kpiAvgHpp').textContent = fmtRp(avgHpp);
+      document.getElementById('kpiAvgPrice').textContent = fmtRp(avgPrice);
+      document.getElementById('kpiAvgGross').textContent = fmtRp(avgGross);
+      document.getElementById('kpiAvgFc').textContent = fmtPct(avgFc);
+
+      const tbody = document.getElementById('pricingTableBody');
+      tbody.innerHTML = data.menuList.map((mn, idx) => {
+        const fc = mn.actualFc;
+        let fcBadge = `<span class="status-pill status-neutral">-</span>`;
+        if (mn.actualPrice > 0 && mn.totalHppWaste > 0) {
+          if (fc <= (state.params.targetFcPct / 100)) {
+            fcBadge = `<span class="status-pill status-ok">${fmtPct(fc)} (Ideal)</span>`;
+          } else if (fc <= 0.36) {
+            fcBadge = `<span class="status-pill status-warn">${fmtPct(fc)} (Waspada)</span>`;
+          } else {
+            fcBadge = `<span class="status-pill status-bad">${fmtPct(fc)} (Tinggi)</span>`;
+          }
+        } else if (mn.actualPrice > 0) {
+          fcBadge = `<span class="status-pill status-neutral">0.0%</span>`;
+        }
+
+        return `
+          <tr>
+            <td>${idx + 1}</td>
+            <td><strong>${mn.name}</strong></td>
+            <td>${mn.cat}</td>
+            <td class="num">${fmtRp(mn.hppBahan)}</td>
+            <td class="num">${fmtRp(mn.hppKemasan)}</td>
+            <td class="num"><strong>${fmtRp(mn.totalHppWaste)}</strong></td>
+            <td class="num" style="color:var(--sbux-green);font-weight:700">${fmtRp(mn.recPrice)}</td>
+            <td class="num">
+              <input type="number" min="0" step="1000" value="${mn.actualPrice}"
+                onchange="updateMenuPrice(${idx}, this.value)" />
+            </td>
+            <td class="num"><strong style="color:var(--soga-pine)">${fmtRp(mn.grossProfitUnit)}</strong></td>
+            <td class="center">${fcBadge}</td>
+          </tr>
+        `;
+      }).join('') + `
+        <tr class="total-row">
+          <td colspan="3">RATA-RATA SELURUH 28 MENU</td>
+          <td class="num">${fmtRp(data.menuList.reduce((s,m)=>s+m.hppBahan,0)/count)}</td>
+          <td class="num">${fmtRp(data.menuList.reduce((s,m)=>s+m.hppKemasan,0)/count)}</td>
+          <td class="num">${fmtRp(avgHpp)}</td>
+          <td class="num">${fmtRp(data.menuList.reduce((s,m)=>s+m.recPrice,0)/count)}</td>
+          <td class="num">${fmtRp(avgPrice)}</td>
+          <td class="num">${fmtRp(avgGross)}</td>
+          <td class="center">${fmtPct(avgFc)}</td>
+        </tr>
+      `;
+    }
+
+    function renderBepSection(data = computeAll()) {
+      document.getElementById('opDaysInput').value = state.params.opDays;
+      document.getElementById('targetNetMarginInput').value = state.params.targetNetMarginPct;
+      document.getElementById('scenLowInput').value = state.params.scenLowPct;
+      document.getElementById('scenNormInput').value = state.params.scenNormPct;
+      document.getElementById('scenHighInput').value = state.params.scenHighPct;
+
+      const opDays = data.opDays;
+      document.getElementById('kpiDailyRev').textContent = fmtRp(data.dailyRev);
+      document.getElementById('kpiMonthlyRevSub').textContent = `Bulanan (${opDays} hr): ${fmtRp(data.dailyRev * opDays)}`;
+      document.getElementById('kpiDailyNet').textContent = fmtRp(data.dailyNet);
+      document.getElementById('kpiMonthlyNetSub').textContent = `Bulanan (${opDays} hr): ${fmtRp(data.dailyNet * opDays)}`;
+      document.getElementById('kpiBepCup').textContent = `${data.bepDailyCups} Cup/Botol`;
+      document.getElementById('kpiBepOmzetSub').textContent = `BEP Omzet: ${fmtRp(data.bepDailyOmzet)} / hari`;
+      document.getElementById('kpiTargetCup').textContent = `${data.targetNetDailyCups} Cup/Botol`;
+      document.getElementById('kpiTargetCupSub').textContent = `Untuk Net Margin ${state.params.targetNetMarginPct}%`;
+
+      // A. OpEx table
+      const opexBody = document.getElementById('opexTableBody');
+      opexBody.innerHTML = state.opex.map((o, idx) => {
+        const daily = o.monthly / opDays;
+        const share = data.totalMonthlyOpex > 0 ? (o.monthly / data.totalMonthlyOpex) : 0;
+        return `
+          <tr>
+            <td>${idx + 1}</td>
+            <td><strong>${o.name}</strong></td>
+            <td style="color:var(--text-muted)">${o.desc}</td>
+            <td class="num">
+              <input type="number" min="0" step="50000" value="${o.monthly}"
+                onchange="updateOpex(${idx}, this.value)" />
+            </td>
+            <td class="num">${fmtRp(daily)}</td>
+            <td class="num">${fmtPct(share)}</td>
+          </tr>
+        `;
+      }).join('') + `
+        <tr class="total-row">
+          <td colspan="3">TOTAL BIAYA OPERASIONAL TETAP (FIXED OPEX)</td>
+          <td class="num">${fmtRp(data.totalMonthlyOpex)}</td>
+          <td class="num">${fmtRp(data.totalDailyOpex)}</td>
+          <td class="num">${data.totalMonthlyOpex > 0 ? '100.0%' : '0.0%'}</td>
+        </tr>
+      `;
+
+      // B. Summary Indicators
+      const indicators = [
+        ['1. Proyeksi Omzet Penjualan (Revenue)', fmtRp(data.dailyRev), fmtRp(data.dailyRev * opDays), 'Total harga jual x target cup/botol terjual per hari'],
+        ['2. Proyeksi Total HPP (Bahan + Kemasan + Waste)', fmtRp(data.dailyHpp), fmtRp(data.dailyHpp * opDays), 'Total biaya pokok penjualan atas volume harian'],
+        ['3. Proyeksi Profit Kotor (Gross Profit)', fmtRp(data.dailyGross), fmtRp(data.dailyGross * opDays), 'Omzet dikurangi Total HPP (Contribution Margin total)'],
+        ['4. Biaya Operasional Tetap (Fixed OpEx)', fmtRp(data.totalDailyOpex), fmtRp(data.totalMonthlyOpex), 'Alokasi biaya tetap harian dari Bagian A'],
+        ['5. Proyeksi Laba / (Rugi) Bersih (Net Profit)', fmtRp(data.dailyNet), fmtRp(data.dailyNet * opDays), 'Profit Kotor dikurangi Biaya Operasional Tetap'],
+        ['6. Rata-Rata Harga Jual per Cup/Botol (Weighted Avg)', fmtRp(data.weightedAvgPrice), fmtRp(data.weightedAvgPrice), 'Rata-rata tertimbang harga jual sesuai komposisi penjualan'],
+        ['7. Rata-Rata HPP per Cup/Botol (Weighted Avg)', fmtRp(data.weightedAvgHpp), fmtRp(data.weightedAvgHpp), 'Rata-rata tertimbang HPP per unit terjual'],
+        ['8. Rata-Rata Margin Kontribusi / Cup', fmtRp(data.weightedContribMargin), fmtRp(data.weightedContribMargin), 'Sisa laba per cup setelah potong HPP untuk menutup OpEx'],
+        ['9. TITIK IMPAS (BEP) OMZET MINIMAL', fmtRp(data.bepDailyOmzet), fmtRp(data.bepDailyOmzet * opDays), 'Omzet minimal agar Laba Bersih = Rp 0 (Impas)'],
+        ['10. TITIK IMPAS (BEP) PENJUALAN CUP / HARI', `${data.bepDailyCups} Cup`, `${data.bepDailyCups * opDays} Cup`, 'Jumlah minimal cup/botol terjual per hari untuk menutup OpEx'],
+        ['11. TARGET PENJUALAN CUP / HARI (CAPAI TARGET NET MARGIN)', `${data.targetNetDailyCups} Cup`, `${data.targetNetDailyCups * opDays} Cup`, `Target penjualan untuk mencapai Net Margin ${state.params.targetNetMarginPct}%`]
+      ];
+      document.getElementById('bepSummaryBody').innerHTML = indicators.map((row, idx) => `
+        <tr class="${idx >= 8 ? 'total-row' : ''}">
+          <td><strong>${row[0]}</strong></td>
+          <td class="num">${row[1]}</td>
+          <td class="num">${row[2]}</td>
+          <td style="color:var(--text-muted);font-size:11.5px">${row[3]}</td>
+        </tr>
+      `).join('');
+
+      // C. 3 Scenarios
+      const ratios = [state.params.scenLowPct / 100, state.params.scenNormPct / 100, state.params.scenHighPct / 100];
+      const scens = ratios.map(r => {
+        const cups = data.totalDailyCups * r;
+        const rev = data.dailyRev * r;
+        const hpp = data.dailyHpp * r;
+        const gross = rev - hpp;
+        const opex = data.totalDailyOpex;
+        const net = gross - opex;
+        const netMonth = net * opDays;
+        const netMargin = rev > 0 ? (net / rev) : 0;
+        let statusHtml = `<span class="status-pill status-neutral">Isi Target Penjualan</span>`;
+        if (data.totalDailyCups > 0) {
+          const diff = Math.round(cups - data.bepDailyCups);
+          statusHtml = diff >= 0
+            ? `<span class="status-pill status-ok">AMAN (+${diff} cup)</span>`
+            : `<span class="status-pill status-bad">DEFISIT (${diff} cup)</span>`;
+        }
+        return { cups, rev, hpp, gross, opex, net, netMonth, netMargin, statusHtml };
+      });
+
+      const scenRows = [
+        ['Rasio Volume Penjualan', `${state.params.scenLowPct}%`, `${state.params.scenNormPct}%`, `${state.params.scenHighPct}%`],
+        ['Estimasi Volume Terjual / Hari', `${fmtNum(scens[0].cups, 0)} Cup`, `${fmtNum(scens[1].cups, 0)} Cup`, `${fmtNum(scens[2].cups, 0)} Cup`],
+        ['Proyeksi Omzet Harian', fmtRp(scens[0].rev), fmtRp(scens[1].rev), fmtRp(scens[2].rev)],
+        ['Proyeksi Total HPP Harian', fmtRp(scens[0].hpp), fmtRp(scens[1].hpp), fmtRp(scens[2].hpp)],
+        ['Proyeksi Profit Kotor Harian', fmtRp(scens[0].gross), fmtRp(scens[1].gross), fmtRp(scens[2].gross)],
+        ['Biaya Operasional Tetap Harian', fmtRp(scens[0].opex), fmtRp(scens[1].opex), fmtRp(scens[2].opex)],
+        ['PROYEKSI LABA / (RUGI) BERSIH HARIAN', fmtRp(scens[0].net), fmtRp(scens[1].net), fmtRp(scens[2].net)],
+        ['PROYEKSI LABA / (RUGI) BERSIH BULANAN', fmtRp(scens[0].netMonth), fmtRp(scens[1].netMonth), fmtRp(scens[2].netMonth)],
+        ['Net Profit Margin (%)', fmtPct(scens[0].netMargin), fmtPct(scens[1].netMargin), fmtPct(scens[2].netMargin)],
+        ['Status terhadap Titik Impas (BEP)', scens[0].statusHtml, scens[1].statusHtml, scens[2].statusHtml]
+      ];
+
+      document.getElementById('scenarioTableBody').innerHTML = scenRows.map((r, i) => `
+        <tr class="${i === 6 || i === 7 ? 'total-row' : ''}">
+          <td><strong>${r[0]}</strong></td>
+          <td class="num">${r[1]}</td>
+          <td class="num">${r[2]}</td>
+          <td class="num">${r[3]}</td>
+        </tr>
+      `).join('');
+
+      // D. Sales Mix per Menu
+      document.getElementById('salesMixTableBody').innerHTML = data.menuList.map((mn, idx) => `
+        <tr>
+          <td>${idx + 1}</td>
+          <td><strong>${mn.name}</strong></td>
+          <td>${mn.cat}</td>
+          <td class="num">${fmtRp(mn.totalHppWaste)}</td>
+          <td class="num">${fmtRp(mn.usedPrice)}</td>
+          <td class="num">${fmtRp(mn.marginUsed)}</td>
+          <td class="num">
+            <input type="number" class="sm" min="0" step="1" value="${mn.dailyTarget}"
+              onchange="updateMenuDailyTarget(${idx}, this.value)" />
+          </td>
+          <td class="num"><strong>${fmtRp(mn.dailyRev)}</strong></td>
+          <td class="num">${fmtRp(mn.dailyHpp)}</td>
+        </tr>
+      `).join('') + `
+        <tr class="total-row">
+          <td colspan="6">TOTAL PROYEKSI PENJUALAN HARIAN</td>
+          <td class="num">${data.totalDailyCups} Cup</td>
+          <td class="num">${fmtRp(data.dailyRev)}</td>
+          <td class="num">${fmtRp(data.dailyHpp)}</td>
+        </tr>
+      `;
+    }
+
+    function renderPromoSection(data = computeAll()) {
+      const menuOptions = data.menuList.map(m => `<option value="${m.name}">${m.name}</option>`).join('');
+
+      // A. Bundling
+      const bBody = document.getElementById('bundlingTableBody');
+      bBody.innerHTML = data.bundlingRows.map((b, idx) => `
+        <tr>
+          <td>${idx + 1}</td>
+          <td><input type="text" value="${b.name}" style="width:140px" onchange="updateBundling(${idx}, 'name', this.value)" /></td>
+          <td>
+            <select onchange="updateBundling(${idx}, 'item1', this.value)">
+              ${data.menuList.map(m => `<option value="${m.name}" ${m.name === b.item1 ? 'selected' : ''}>${m.name}</option>`).join('')}
+            </select>
+          </td>
+          <td class="num"><input type="number" class="sm" min="0" value="${b.qty1}" onchange="updateBundling(${idx}, 'qty1', this.value)" /></td>
+          <td>
+            <select onchange="updateBundling(${idx}, 'item2', this.value)">
+              ${data.menuList.map(m => `<option value="${m.name}" ${m.name === b.item2 ? 'selected' : ''}>${m.name}</option>`).join('')}
+            </select>
+          </td>
+          <td class="num"><input type="number" class="sm" min="0" value="${b.qty2}" onchange="updateBundling(${idx}, 'qty2', this.value)" /></td>
+          <td class="num">${fmtRp(b.hpp)}</td>
+          <td class="num">${fmtRp(b.normalPrice)}</td>
+          <td class="num"><input type="number" class="sm" min="0" max="80" value="${b.discPct}" onchange="updateBundling(${idx}, 'discPct', this.value)" /></td>
+          <td class="num"><strong style="color:var(--terracotta)">${fmtRp(b.bundlePrice)}</strong></td>
+          <td class="center">${fmtPct(b.fcPct)}</td>
+          <td class="num">${fmtRp(b.profitUnit)}</td>
+          <td class="num"><input type="number" class="sm" min="0" value="${b.dailyTarget}" onchange="updateBundling(${idx}, 'dailyTarget', this.value)" /></td>
+          <td class="num"><strong>${fmtRp(b.dailyOmzet)}</strong></td>
+          <td class="num"><strong>${fmtRp(b.dailyProfit)}</strong></td>
+        </tr>
+      `).join('');
+
+      // B. Happy Hour
+      const hhBody = document.getElementById('happyHourTableBody');
+      hhBody.innerHTML = data.happyHourRows.map((h, idx) => `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>
+            <select onchange="updateHappyHour(${idx}, 'menuName', this.value)">
+              ${data.menuList.map(m => `<option value="${m.name}" ${m.name === h.menuName ? 'selected' : ''}>${m.name}</option>`).join('')}
+            </select>
+          </td>
+          <td class="num">${fmtRp(h.hpp)}</td>
+          <td class="num">${fmtRp(h.normalPrice)}</td>
+          <td class="num"><input type="number" class="sm" min="0" max="80" value="${h.discPct}" onchange="updateHappyHour(${idx}, 'discPct', this.value)" /></td>
+          <td class="num"><strong style="color:var(--terracotta)">${fmtRp(h.hhPrice)}</strong></td>
+          <td class="center">${fmtPct(h.fcNormal)}</td>
+          <td class="center">${fmtPct(h.fcHh)}</td>
+          <td class="num">${fmtRp(h.marginHh)}</td>
+          <td class="num"><input type="number" class="sm" min="0" value="${h.dailyTarget}" onchange="updateHappyHour(${idx}, 'dailyTarget', this.value)" /></td>
+          <td class="num"><strong>${fmtRp(h.dailyOmzet)}</strong></td>
+          <td class="num"><strong>${fmtRp(h.dailyProfit)}</strong></td>
+        </tr>
+      `).join('');
+
+      // C. Combined Impact (matching Simulasi_Bundling_&_Promo R26:R37)
+      const bUnits = data.bundlingRows.reduce((s, r) => s + r.dailyUnits, 0);
+      const bOmzet = data.bundlingRows.reduce((s, r) => s + r.dailyOmzet, 0);
+      const bHpp = data.bundlingRows.reduce((s, r) => s + r.dailyHppTotal, 0);
+
+      const hhUnits = data.happyHourRows.reduce((s, r) => s + r.dailyTarget, 0);
+      const hhOmzet = data.happyHourRows.reduce((s, r) => s + r.dailyOmzet, 0);
+      const hhHpp = data.happyHourRows.reduce((s, r) => s + r.dailyHppTotal, 0);
+
+      const combCups = data.totalDailyCups + bUnits + hhUnits;
+      const combRev = data.dailyRev + bOmzet + hhOmzet;
+      const combHpp = data.dailyHpp + bHpp + hhHpp;
+      const combGross = combRev - combHpp;
+      const combFc = combRev > 0 ? (combHpp / combRev) : 0;
+      const baseFc = data.dailyRev > 0 ? (data.dailyHpp / data.dailyRev) : 0;
+      const combAvgPrice = combCups > 0 ? (combRev / combCups) : data.weightedAvgPrice;
+      const combMarginCup = combCups > 0 ? (combGross / combCups) : data.weightedContribMargin;
+      const combNet = combGross - data.totalDailyOpex;
+      const combBepCups = combMarginCup > 0 ? Math.ceil(data.totalDailyOpex / combMarginCup) : 0;
+      const combBepOmzet = (combAvgPrice > 0 && combMarginCup > 0)
+        ? data.totalDailyOpex / (combMarginCup / combAvgPrice)
+        : 0;
+
+      const impactRows = [
+        ['1. Total Volume Penjualan Harian (Cup/Botol)', `${data.totalDailyCups} Cup`, `${combCups} Cup`, `+${combCups - data.totalDailyCups} Cup`],
+        ['2. Total Proyeksi Omzet Harian', fmtRp(data.dailyRev), fmtRp(combRev), fmtRp(combRev - data.dailyRev)],
+        ['3. Total Proyeksi HPP Harian', fmtRp(data.dailyHpp), fmtRp(combHpp), fmtRp(combHpp - data.dailyHpp)],
+        ['4. Total Proyeksi Profit Kotor Harian', fmtRp(data.dailyGross), fmtRp(combGross), fmtRp(combGross - data.dailyGross)],
+        ['5. Rata-Rata Food Cost Gabungan (%)', fmtPct(baseFc), fmtPct(combFc), `${((combFc - baseFc) * 100).toFixed(1)}%`],
+        ['6. Proyeksi Laba / (Rugi) Bersih Harian', fmtRp(data.dailyNet), fmtRp(combNet), fmtRp(combNet - data.dailyNet)],
+        ['7. Proyeksi Laba / (Rugi) Bersih Bulanan', fmtRp(data.dailyNet * data.opDays), fmtRp(combNet * data.opDays), fmtRp((combNet - data.dailyNet) * data.opDays)],
+        ['8. Titik Impas (BEP) Penjualan Cup / Hari', `${data.bepDailyCups} Cup`, `${combBepCups} Cup`, `${combBepCups - data.bepDailyCups} Cup`],
+        ['9. Titik Impas (BEP) Omzet Minimal / Hari', fmtRp(data.bepDailyOmzet), fmtRp(combBepOmzet), fmtRp(combBepOmzet - data.bepDailyOmzet)]
+      ];
+
+      document.getElementById('promoImpactBody').innerHTML = impactRows.map((r, i) => `
+        <tr class="${i === 5 || i === 6 ? 'total-row' : ''}">
+          <td><strong>${r[0]}</strong></td>
+          <td class="num">${r[1]}</td>
+          <td class="num">${r[2]}</td>
+          <td class="num" style="color:var(--sbux-green);font-weight:700">${r[3]}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderBelanjaSection(data = computeAll()) {
+      const cycle = Math.max(1, state.params.shopCycleDays || 7);
+      const bufMult = 1 + ((state.params.safetyStockPct || 0) / 100);
+
+      document.getElementById('shopCycleInput').value = cycle;
+      document.getElementById('safetyStockInput').value = state.params.safetyStockPct;
+      document.getElementById('shopDailyCupsBadge').textContent = `${data.totalDailyCups} Cup/Botol`;
+
+      // A. Prep Production Needs
+      const prepOrderIds = ['PREP-KSS', 'PREP-BERRY', 'PREP-ORANGE', 'PREP-ESPRESSO', 'PREP-CREAMER', 'PREP-GULA', 'PREP-AREN'];
+      document.getElementById('prepNeedBody').innerHTML = prepOrderIds.map((pid, idx) => {
+        const p = data.prepMap[pid];
+        const cleanDaily = data.cleanPrepDaily[pid] || 0;
+        const bufDaily = cleanDaily * bufMult;
+        const totalPeriod = bufDaily * cycle;
+        const batches = p.yieldQty > 0 ? Math.ceil((totalPeriod / p.yieldQty) * 10) / 10 : 0;
+        return `
+          <tr>
+            <td>${idx + 1}</td>
+            <td><strong>${p.name.replace(/^\d+\.\s*/, '')}</strong></td>
+            <td class="center">${p.yieldUnit}</td>
+            <td class="num">${fmtNum(cleanDaily, 1)}</td>
+            <td class="num">${fmtNum(bufDaily, 1)}</td>
+            <td class="num"><strong>${fmtNum(totalPeriod, 1)}</strong></td>
+            <td class="num">${fmtNum(p.yieldQty, 0)}</td>
+            <td class="num"><span class="badge-tag orange">${fmtNum(batches, 1)} Batch</span></td>
+          </tr>
+        `;
+      }).join('');
+
+      // B. 22-Item Shopping List
+      let totalModal = 0;
+      let totalOrderPacks = 0;
+      const catModalMap = {};
+
+      const itemRows = state.materials.map(m => {
+        const cleanDaily = data.dailyMatUsage[m.id] || 0;
+        const bufDaily = cleanDaily * bufMult;
+        const periodNeed = bufDaily * cycle;
+        const remStock = state.stockRem[m.id] || 0;
+        const netNeed = Math.max(0, periodNeed - remStock);
+        const orderPacks = (netNeed > 0 && m.packSize > 0) ? Math.ceil(netNeed / m.packSize) : 0;
+        const estModal = orderPacks * m.buyPrice;
+        totalModal += estModal;
+        totalOrderPacks += orderPacks;
+        catModalMap[m.cat] = (catModalMap[m.cat] || 0) + estModal;
+        return { m, periodNeed, remStock, netNeed, orderPacks, estModal };
+      });
+
+      document.getElementById('kpiTotalShopModal').textContent = fmtRp(totalModal);
+      document.getElementById('kpiShopCycleSub').textContent = `Untuk siklus ${cycle} hari`;
+      document.getElementById('kpiDailyShopModal').textContent = fmtRp(totalModal / cycle);
+      document.getElementById('kpiTotalOrderPacks').textContent = `${totalOrderPacks} Kemasan`;
+
+      document.getElementById('shoppingListBody').innerHTML = itemRows.map(r => {
+        const share = totalModal > 0 ? (r.estModal / totalModal) : 0;
+        return `
+          <tr>
+            <td><strong>${r.m.id}</strong></td>
+            <td><strong>${r.m.name}</strong></td>
+            <td>${r.m.cat}</td>
+            <td class="num">${fmtNum(r.periodNeed, 0)} ${r.m.useUnit}</td>
+            <td class="num">
+              <input type="number" class="sm" min="0" value="${r.remStock}"
+                onchange="updateStockRem('${r.m.id}', this.value)" />
+            </td>
+            <td class="num">${fmtNum(r.netNeed, 0)} ${r.m.useUnit}</td>
+            <td class="num"><strong style="color:var(--sbux-green)">${r.orderPacks} ${r.m.buyUnit}</strong></td>
+            <td class="num">${fmtRp(r.m.buyPrice)}</td>
+            <td class="num"><strong style="color:var(--terracotta)">${fmtRp(r.estModal)}</strong></td>
+            <td class="num">${fmtPct(share)}</td>
+          </tr>
+        `;
+      }).join('') + `
+        <tr class="total-row">
+          <td colspan="6">TOTAL ESTIMASI BELANJA &amp; MODAL STOK (${cycle} HARI)</td>
+          <td class="num">${totalOrderPacks} Kemasan</td>
+          <td></td>
+          <td class="num">${fmtRp(totalModal)}</td>
+          <td class="num">${totalModal > 0 ? '100.0%' : '0.0%'}</td>
+        </tr>
+      `;
+
+      // C. Category Recap
+      const cats = ['Kopi', 'Dairy', 'Powder & Cream', 'Pemanis', 'Fruit & Syrup', 'Tambahan', 'Air & Es', 'Kemasan'];
+      document.getElementById('shopCategoryBody').innerHTML = cats.map((c, i) => {
+        const mod = catModalMap[c] || 0;
+        const daily = mod / cycle;
+        const monthly = daily * data.opDays;
+        const share = totalModal > 0 ? (mod / totalModal) : 0;
+        return `
+          <tr>
+            <td>${i + 1}</td>
+            <td><strong>${c}</strong></td>
+            <td class="num">${fmtRp(mod)}</td>
+            <td class="num">${fmtRp(daily)}</td>
+            <td class="num">${fmtRp(monthly)}</td>
+            <td class="num">${fmtPct(share)}</td>
+          </tr>
+        `;
+      }).join('') + `
+        <tr class="total-row">
+          <td colspan="2">TOTAL MODAL STOK</td>
+          <td class="num">${fmtRp(totalModal)}</td>
+          <td class="num">${fmtRp(totalModal / cycle)}</td>
+          <td class="num">${fmtRp((totalModal / cycle) * data.opDays)}</td>
+          <td class="num">${totalModal > 0 ? '100.0%' : '0.0%'}</td>
+        </tr>
+      `;
+    }
+
+    function renderOpnameSection(data = computeAll()) {
+      document.getElementById('opnameDate').value = state.opname.date;
+      document.getElementById('opnameShift').value = state.opname.shift;
+      document.getElementById('opnameBarista').value = state.opname.barista;
+      document.getElementById('opnameVerifier').value = state.opname.verifier;
+      document.getElementById('opnameTol').value = state.opname.tolerancePct;
+
+      const tolRatio = (state.opname.tolerancePct || 0) / 100;
+      let auditCount = 0;
+      let totalVarianceRp = 0;
+      let valOpening = 0;
+      let valIncoming = 0;
+      let valWaste = 0;
+      let valActualCogs = 0;
+      let valClosing = 0;
+
+      const rowsHtml = state.materials.map(m => {
+        const row = state.opname.rows[m.id] || { opening: 0, incoming: 0, waste: 0, closing: 0, note: '' };
+        const uCost = data.matMap[m.id].unitCost;
+        const avail = row.opening + row.incoming;
+        const estPos = data.dailyMatUsage[m.id] || 0;
+        const theoEnd = avail - estPos - row.waste;
+        const actualUse = avail - row.waste - row.closing;
+        const diff = row.closing - theoEnd;
+        const diffPct = (avail + row.closing) > 0 ? (Math.abs(diff) / Math.max(avail, 1)) : 0;
+        const diffRp = diff * uCost;
+
+        let statusHtml = `<span class="status-pill status-neutral">BELUM DIISI</span>`;
+        if (avail + row.closing > 0) {
+          if (diffPct > tolRatio) {
+            auditCount++;
+            statusHtml = `<span class="status-pill status-bad">SELISIH / AUDIT</span>`;
+          } else {
+            statusHtml = `<span class="status-pill status-ok">SESUAI</span>`;
+          }
+        }
+
+        totalVarianceRp += diffRp;
+        valOpening += row.opening * uCost;
+        valIncoming += row.incoming * uCost;
+        valWaste += row.waste * uCost;
+        valActualCogs += actualUse * uCost;
+        valClosing += row.closing * uCost;
+
+        return `
+          <tr>
+            <td><strong>${m.id}</strong></td>
+            <td><strong>${m.name}</strong></td>
+            <td class="center">${m.useUnit}</td>
+            <td class="num"><input type="number" class="sm" min="0" value="${row.opening}" onchange="updateOpnameRow('${m.id}', 'opening', this.value)" /></td>
+            <td class="num"><input type="number" class="sm" min="0" value="${row.incoming}" onchange="updateOpnameRow('${m.id}', 'incoming', this.value)" /></td>
+            <td class="num"><strong>${fmtNum(avail, 0)}</strong></td>
+            <td class="num">${fmtNum(estPos, 1)}</td>
+            <td class="num"><input type="number" class="sm" min="0" value="${row.waste}" onchange="updateOpnameRow('${m.id}', 'waste', this.value)" /></td>
+            <td class="num">${fmtNum(theoEnd, 1)}</td>
+            <td class="num"><input type="number" class="sm" min="0" value="${row.closing}" onchange="updateOpnameRow('${m.id}', 'closing', this.value)" /></td>
+            <td class="num"><strong>${fmtNum(actualUse, 1)}</strong></td>
+            <td class="num" style="color:${diff < 0 ? 'var(--danger)' : (diff > 0 ? 'var(--sbux-green)' : 'inherit')};font-weight:700">${fmtNum(diff, 1)}</td>
+            <td class="center">${fmtPct(diffPct)}</td>
+            <td class="center">${statusHtml}</td>
+            <td class="num"><strong>${fmtRp(diffRp)}</strong></td>
+            <td><input type="text" class="note-inp" placeholder="Alasan..." value="${row.note || ''}" onchange="updateOpnameRow('${m.id}', 'note', this.value)" /></td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('opnameTableBody').innerHTML = rowsHtml + `
+        <tr class="total-row">
+          <td colspan="13">REKAPITULASI AUDIT &amp; TOTAL DAMPAK SELISIH STOK (RP)</td>
+          <td class="center">${auditCount} Item Audit</td>
+          <td class="num">${fmtRp(totalVarianceRp)}</td>
+          <td></td>
+        </tr>
+      `;
+
+      const statusEl = document.getElementById('kpiOpnameStatus');
+      if (auditCount > 0) {
+        statusEl.textContent = `PERLU AUDIT (${auditCount})`;
+        statusEl.style.color = 'var(--danger)';
+      } else {
+        statusEl.textContent = 'AMAN / SESUAI';
+        statusEl.style.color = 'var(--sbux-green)';
+      }
+      document.getElementById('kpiOpnameAuditCount').textContent = `${auditCount} Item melebihi toleransi ${state.opname.tolerancePct}%`;
+      document.getElementById('kpiOpnameVarianceRp').textContent = fmtRp(totalVarianceRp);
+      document.getElementById('kpiOpnameActualCogs').textContent = fmtRp(valActualCogs);
+      document.getElementById('kpiOpnameClosingVal').textContent = fmtRp(valClosing);
+
+      const valRows = [
+        ['1. Nilai Persediaan Awal (Opening Stock)', fmtRp(valOpening), 'Modal stok fisik saat buka bar'],
+        ['2. Nilai Pembelian / Barang Masuk (+)', fmtRp(valIncoming), 'Total barang masuk dari supplier/gudang'],
+        ['3. Nilai Waste / Kalibrasi / Rusak (-)', fmtRp(valWaste), 'Biaya bahan terbuang / dial-in / tumpah'],
+        ['4. Nilai Pemakaian Aktual (Actual COGS)', fmtRp(valActualCogs), 'HPP riil bahan terpakai hari ini'],
+        ['5. Nilai Persediaan Akhir Fisik (Closing)', fmtRp(valClosing), 'Saldo modal stok fisik saat tutup bar'],
+        ['6. Total Selisih Opname (Variance Rp)', fmtRp(totalVarianceRp), 'Positif = Surplus | Negatif = Susut / Hilang']
+      ];
+      document.getElementById('opnameValuationBody').innerHTML = valRows.map((r, i) => `
+        <tr class="${i === 5 ? 'total-row' : ''}">
+          <td>${i + 1}</td>
+          <td><strong>${r[0].replace(/^\d+\.\s*/, '')}</strong></td>
+          <td class="num"><strong>${r[1]}</strong></td>
+          <td style="color:var(--text-muted)">${r[2]}</td>
+        </tr>
+      `).join('');
+    }
+
+    /* ============================================================================
+       EVENT HANDLERS & STATE MUTATORS
+       ============================================================================ */
+    function updateMaterial(id, field, val) {
+      const m = state.materials.find(x => x.id === id);
+      if (!m) return;
+      m[field] = Math.max(0, parseFloat(val) || 0);
+      saveState();
+      renderAll();
+    }
+
+    function updatePrepItem(pIdx, iIdx, val) {
+      state.preps[pIdx].items[iIdx].qty = Math.max(0, parseFloat(val) || 0);
+      saveState();
+      renderAll();
+    }
+
+    function updatePrepYield(pIdx, val) {
+      state.preps[pIdx].yieldQty = Math.max(1, parseFloat(val) || 1);
+      saveState();
+      renderAll();
+    }
+
+    function updateMenuRecipeQty(mIdx, iIdx, val) {
+      state.menus[mIdx].items[iIdx].qty = Math.max(0, parseFloat(val) || 0);
+      saveState();
+      renderAll();
+    }
+
+    function updateMenuPrice(idx, val) {
+      state.menus[idx].actualPrice = Math.max(0, parseFloat(val) || 0);
+      saveState();
+      renderAll();
+    }
+
+    function updateMenuDailyTarget(idx, val) {
+      state.menus[idx].dailyTarget = Math.max(0, parseFloat(val) || 0);
+      saveState();
+      renderAll();
+    }
+
+    function updateParam(key, val) {
+      state.params[key] = parseFloat(val) || 0;
+      saveState();
+      renderAll();
+    }
+
+    function updateOpex(idx, val) {
+      state.opex[idx].monthly = Math.max(0, parseFloat(val) || 0);
+      saveState();
+      renderAll();
+    }
+
+    function updateBundling(idx, field, val) {
+      if (field === 'name' || field === 'item1' || field === 'item2') {
+        state.bundlings[idx][field] = val;
+      } else {
+        state.bundlings[idx][field] = Math.max(0, parseFloat(val) || 0);
+      }
+      saveState();
+      renderAll();
+    }
+
+    function updateHappyHour(idx, field, val) {
+      if (field === 'menuName') {
+        state.happyHours[idx][field] = val;
+      } else {
+        state.happyHours[idx][field] = Math.max(0, parseFloat(val) || 0);
+      }
+      saveState();
+      renderAll();
+    }
+
+    function updateStockRem(id, val) {
+      state.stockRem[id] = Math.max(0, parseFloat(val) || 0);
+      saveState();
+      renderBelanjaSection();
+    }
+
+    function updateOpnameMeta(key, val) {
+      state.opname[key] = key === 'tolerancePct' ? (parseFloat(val) || 0) : val;
+      saveState();
+      renderOpnameSection();
+    }
+
+    function updateOpnameRow(id, field, val) {
+      if (!state.opname.rows[id]) {
+        state.opname.rows[id] = { opening: 0, incoming: 0, waste: 0, closing: 0, note: '' };
+      }
+      state.opname.rows[id][field] = field === 'note' ? val : Math.max(0, parseFloat(val) || 0);
+      saveState();
+      renderOpnameSection();
+    }
+
+    /* Quick Simulation Helpers */
+    function loadSampleSupplierPrices() {
+      const samplePrices = {
+        'BHN-01': 185000, 'BHN-02': 19500, 'BHN-03': 42000, 'BHN-04': 48000,
+        'BHN-05': 16500, 'BHN-06': 17500, 'BHN-07': 28000, 'BHN-08': 115000,
+        'BHN-09': 75000, 'BHN-10': 38000, 'BHN-11': 42000, 'BHN-12': 44000,
+        'BHN-13': 15000, 'BHN-14': 5000, 'BHN-15': 4000, 'BHN-16': 20000,
+        'BHN-17': 12000, 'KMS-01': 45000, 'KMS-02': 50000, 'KMS-03': 135000,
+        'KMS-04': 165000, 'KMS-05': 130000
+      };
+      state.materials.forEach(m => {
+        if (samplePrices[m.id] !== undefined) m.buyPrice = samplePrices[m.id];
+      });
+      saveState();
+      renderAll();
+      alert('Simulasi harga beli bahan baku terisi! Silakan sesuaikan angka tiap bahan di Tab 1 dengan nota supplier Anda.');
+    }
+
+    function loadSampleSalesAndOpex() {
+      const sampleOpex = [4500000, 2500000, 950000, 450000, 350000, 400000, 300000, 250000];
+      state.opex.forEach((o, i) => { o.monthly = sampleOpex[i] || 0; });
+
+      const sampleTargets = {
+        'MNU-01': 12, 'MNU-02': 8, 'MNU-03': 10, 'MNU-04': 7, 'MNU-05': 6,
+        'MNU-06': 14, 'MNU-07': 9, 'MNU-08': 12, 'MNU-09': 4, 'MNU-10': 2,
+        'MNU-11': 4, 'MNU-14': 3
+      };
+      state.menus.forEach(m => { m.dailyTarget = sampleTargets[m.id] || 0; });
+      saveState();
+      renderAll();
+    }
+
+    function restoreFinalMenuPrices() {
+      DEFAULT_MENUS.forEach((dm, idx) => {
+        state.menus[idx].actualPrice = dm.actualPrice;
+      });
+      saveState();
+      renderAll();
+    }
+
+    function resetAllData() {
+      if (!confirm('Reset seluruh input backoffice kembali ke awal (harga menu digital tetap dipertahankan)?')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      state = buildDefaultState();
+      saveState();
+      renderAll();
+    }
+
+    function getGasBackupUrl() {
+      return (localStorage.getItem(GAS_URL_STORAGE_KEY) || DEFAULT_GAS_BACKUP_URL || "").trim();
+    }
+
+    function showBackupToast(message, type = 'success') {
+      let toast = document.getElementById('kopiSogaBackupToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'kopiSogaBackupToast';
+        toast.style.cssText = [
+          'position:fixed',
+          'bottom:20px',
+          'right:20px',
+          'left:20px',
+          'max-width:460px',
+          'margin:0 auto',
+          'z-index:9999',
+          'padding:12px 16px',
+          'border-radius:12px',
+          'font-family:inherit',
+          'font-size:13px',
+          'font-weight:600',
+          'line-height:1.45',
+          'box-shadow:0 10px 25px rgba(0,0,0,0.22)',
+          'transition:opacity 0.25s ease'
+        ].join(';');
+        document.body.appendChild(toast);
+      }
+      const styles = {
+        success: 'background:#00491E;color:#FAF8F4;border:1px solid #006241;',
+        warning: 'background:#C0583C;color:#FFFFFF;border:1px solid #E0660B;',
+        info: 'background:#1E293B;color:#FAF8F4;border:1px solid #334155;'
+      };
+      toast.style.cssText += ';' + (styles[type] || styles.info);
+      toast.textContent = message;
+      toast.style.opacity = '1';
+      toast.style.display = 'block';
+      clearTimeout(window._backupToastTimer);
+      window._backupToastTimer = setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => { toast.style.display = 'none'; }, 260);
+      }, 5000);
+    }
+
+    function configureGasUrl() {
+      const current = getGasBackupUrl();
+      const input = prompt(
+        "Tempel Web App URL Google Apps Script Anda (berakhiran /exec):\n" +
+        "Contoh: https://script.google.com/macros/s/AKfycb.../exec\n\n" +
+        "(Kosongkan lalu klik OK jika ingin menghapus URL)",
+        current
+      );
+      if (input === null) return current;
+      const cleaned = input.trim();
+      if (cleaned) {
+        localStorage.setItem(GAS_URL_STORAGE_KEY, cleaned);
+        showBackupToast("✅ URL Google Drive berhasil disimpan!", "success");
+      } else {
+        localStorage.removeItem(GAS_URL_STORAGE_KEY);
+        showBackupToast("ℹ️ URL Google Drive dihapus.", "info");
+      }
+      return cleaned;
+    }
+
+    async function exportBackupJSON() {
+      const jsonPayload = JSON.stringify(state, null, 2);
+
+      // 1. Tetap unduh salinan lokal ke perangkat sebagai pengaman offline
+      const blob = new Blob([jsonPayload], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `kopi-soga-backoffice-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      // 2. Cek URL Google Apps Script (dari localStorage atau konstanta kode)
+      let gasUrl = getGasBackupUrl();
+      if (!gasUrl) {
+        gasUrl = configureGasUrl();
+        if (!gasUrl) {
+          showBackupToast("💾 Backup lokal terunduh. Atur ⚙️ URL Drive untuk auto-upload ke Google Drive.", "info");
+          return;
+        }
+      }
+
+      // 3. Kirim otomatis ke Google Drive via Google Apps Script
+      const btn = document.getElementById('btnBackupJson');
+      const originalText = btn ? btn.innerHTML : '&#128190; Backup JSON';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '&#9203; Mengirim ke Drive...';
+      }
+
+      try {
+        const response = await fetch(gasUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: jsonPayload
+        });
+
+        const result = await response.json();
+        if (result.status === 'success') {
+          showBackupToast(`✅ Backup lokal terunduh & tersimpan di Google Drive (${result.fileName})`, 'success');
+        } else {
+          showBackupToast(`⚠️ Backup lokal terunduh, tapi gagal simpan ke Drive: ${result.message || 'Error GAS'}`, 'warning');
+        }
+      } catch (err) {
+        showBackupToast(`⚠️ Backup lokal terunduh, namun gagal terhubung ke Google Drive: ${err.message}`, 'warning');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
+      }
+    }
+
+    function importBackupJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          const base = buildDefaultState();
+          state = { ...base, ...parsed };
+          saveState();
+          renderAll();
+          alert('Data backup Kopi Soga berhasil dipulihkan!');
+        } catch (err) {
+          alert('File backup tidak valid.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    /* Navigation Tabs */
+    document.querySelectorAll('.nav-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.getAttribute('data-tab')).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    // Initial render
+    renderAll();
+  </script>
+</body>
+</html>
